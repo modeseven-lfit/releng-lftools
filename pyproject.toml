@@ -1,4 +1,6 @@
 [build-system]
+# Require setuptools >=70.0.0
+# https://nvd.nist.gov/vuln/detail/CVE-2024-6345
 requires = ["setuptools>=46.1.0", "setuptools_scm[toml]>=5"]
 build-backend = "setuptools.build_meta"
 
@@ -8,9 +10,7 @@ dynamic = ["version"]
 description = "Linux Foundation Release Engineering Tools"
 readme = "README.md"
 requires-python = ">=3.8"
-license = "EPL-1.0"
-license-files = ["LICENSES/EPL-1.0.txt"]
-
+license = {file = "LICENSES/EPL-1.0.txt"}
 authors = [
     {name = "LF Release Engineering", email = "releng@linuxfoundation.org"},
 ]
@@ -69,7 +69,7 @@ dependencies = [
     "python-jenkins",
     "PyYAML",
     "responses",
-    "requests<2.32.0",
+    "requests",
     "rsa",
     "ruamel.yaml",
     "ruamel.yaml.clib",
@@ -110,7 +110,12 @@ test = [
     "pytest-cov==5.0.0",
     "pytest-datafiles==3.0.0",
     "pytest-mock==3.14.0",
-    "pytest-responses==0.5.1"
+    "pytest-responses==0.5.1",
+    # Constrain problematic packages for Python 3.8 compatibility
+    "attrs<23.0.0",
+    "certifi<2024.0.0",
+    "typing-extensions<4.10.0",
+    "jsonschema<4.20.0"
 ]
 
 [project.urls]
