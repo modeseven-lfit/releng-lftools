@@ -34,8 +34,15 @@ def gerrit_cli(ctx):
 @click.argument("gerrit_fqdn")
 @click.argument("gerrit_project")
 @click.argument("filename")
-@click.option("--issue_id", type=str, required=False, help="For projects that enforce an issue id for changesets")
-@click.option("--file_location", type=str, required=False, help="File path within the repository")
+@click.option(
+    "--issue_id",
+    type=str,
+    required=False,
+    help="For projects that enforce an issue id for changesets",
+)
+@click.option(
+    "--file_location", type=str, required=False, help="File path within the repository"
+)
 @click.pass_context
 def addfile(ctx, gerrit_fqdn, gerrit_project, filename, issue_id, file_location):
     """Add a file for review to a Project.
@@ -56,8 +63,18 @@ def addfile(ctx, gerrit_fqdn, gerrit_project, filename, issue_id, file_location)
 @click.argument("gerrit_fqdn")
 @click.argument("gerrit_project")
 @click.argument("jjbrepo")
-@click.option("--issue_id", type=str, required=False, help="For projects that enforce an issue id for changesets")
-@click.option("--agent", type=str, required=False, help="Specify the Jenkins agent label to run the job on")
+@click.option(
+    "--issue_id",
+    type=str,
+    required=False,
+    help="For projects that enforce an issue id for changesets",
+)
+@click.option(
+    "--agent",
+    type=str,
+    required=False,
+    help="Specify the Jenkins agent label to run the job on",
+)
 @click.pass_context
 def addinfojob(ctx, gerrit_fqdn, gerrit_project, jjbrepo, issue_id, agent):
     """Add an INFO job for a new Project.
@@ -80,7 +97,12 @@ def addinfojob(ctx, gerrit_fqdn, gerrit_project, jjbrepo, issue_id, agent):
 @click.command(name="addgitreview")
 @click.argument("gerrit_fqdn")
 @click.argument("gerrit_project")
-@click.option("--issue_id", type=str, required=False, help="For projects that enforce an issue id for changesets")
+@click.option(
+    "--issue_id",
+    type=str,
+    required=False,
+    help="For projects that enforce an issue id for changesets",
+)
 @click.pass_context
 def addgitreview(ctx, gerrit_fqdn, gerrit_project, issue_id):
     """Add git review to a project.
@@ -188,8 +210,18 @@ def list_project_inherits_from(ctx, gerrit_fqdn, gerrit_project):
 @click.argument("gerrit_fqdn")
 @click.argument("gerrit_project")
 @click.argument("jjbrepo")
-@click.option("--issue_id", type=str, required=False, help="For projects that enforce an issue id for changesets")
-@click.option("--nexus3", type=str, required=False, help="Specify a Nexus 3 server, e.g. nexus3.example.org")
+@click.option(
+    "--issue_id",
+    type=str,
+    required=False,
+    help="For projects that enforce an issue id for changesets",
+)
+@click.option(
+    "--nexus3",
+    type=str,
+    required=False,
+    help="Specify a Nexus 3 server, e.g. nexus3.example.org",
+)
 @click.option(
     "--nexus3_ports",
     type=str,
@@ -197,7 +229,9 @@ def list_project_inherits_from(ctx, gerrit_fqdn, gerrit_project):
     help="Comma-separated list of ports supported by the Nexus 3 server specified",
 )
 @click.pass_context
-def addmavenconfig(ctx, gerrit_fqdn, gerrit_project, jjbrepo, issue_id, nexus3, nexus3_ports):
+def addmavenconfig(
+    ctx, gerrit_fqdn, gerrit_project, jjbrepo, issue_id, nexus3, nexus3_ports
+):
     """Add maven config file for JCasC.
 
     \b

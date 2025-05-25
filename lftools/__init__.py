@@ -12,6 +12,7 @@
 #   Linux Foundation Release Engineering
 ##############################################################################
 """lftools package."""
+
 from __future__ import annotations
 
 __author__ = "Thanh Ha"
@@ -25,7 +26,9 @@ class LogFormatter(logging.Formatter):
     """Custom log formatter."""
 
     default_fmt: logging.Formatter = logging.Formatter("%(levelname)s: %(message)s")
-    debug_fmt: logging.Formatter = logging.Formatter("%(levelname)s: %(name)s:%(lineno)d: %(message)s")
+    debug_fmt: logging.Formatter = logging.Formatter(
+        "%(levelname)s: %(name)s:%(lineno)d: %(message)s"
+    )
     info_fmt: logging.Formatter = logging.Formatter("%(message)s")
 
     def format(self, record: logging.LogRecord) -> str:

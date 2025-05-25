@@ -8,6 +8,7 @@
 # http://www.eclipse.org/legal/epl-v10.html
 ##############################################################################
 """Version bump script for Maven based projects."""
+
 from __future__ import annotations
 
 __author__ = "Thanh Ha"
@@ -89,7 +90,11 @@ def release(ctx, release_tag: str) -> None:
 @click.command()
 @click.argument("release-tag")
 @click.argument("patch-dir")
-@click.option("--project", default="OpenDaylight", help="Project name to use when tagging. (Default: OpenDaylight)")
+@click.option(
+    "--project",
+    default="OpenDaylight",
+    help="Project name to use when tagging. (Default: OpenDaylight)",
+)
 @click.pass_context
 def patch(ctx, release_tag: str, patch_dir: str, project: str) -> None:
     """Patch a project with git.bundles and then version bump.
@@ -101,7 +106,9 @@ def patch(ctx, release_tag: str, patch_dir: str, project: str) -> None:
         log.error("{} is not a valid directory.".format(patch_dir))
         sys.exit(404)
     # due to the nature of the subprocess call, this is not testable so disable coverage
-    status: int = subprocess.call(["version", "patch", release_tag, patch_dir, project])  # pragma: no cover
+    status: int = subprocess.call(
+        ["version", "patch", release_tag, patch_dir, project]
+    )  # pragma: no cover
     sys.exit(status)  # pragma: no cover
 
 

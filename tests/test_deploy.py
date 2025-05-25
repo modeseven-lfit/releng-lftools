@@ -59,7 +59,9 @@ def test_copy_archive_dir(cli_runner, datafiles):
     os.mkdir(stage_dir)
 
     os.chdir(stage_dir)
-    result = cli_runner.invoke(cli.cli, ["--debug", "deploy", "copy-archives", workspace_dir], obj={})
+    result = cli_runner.invoke(
+        cli.cli, ["--debug", "deploy", "copy-archives", workspace_dir], obj={}
+    )
     assert result.exit_code == 0
 
     assert os.path.exists(os.path.join(stage_dir, "test.log"))
@@ -76,7 +78,11 @@ def test_copy_archive_pattern(cli_runner, datafiles):
     os.mkdir(stage_dir)
 
     os.chdir(stage_dir)
-    result = cli_runner.invoke(cli.cli, ["--debug", "deploy", "copy-archives", workspace_dir, "**/*.txt"], obj={})
+    result = cli_runner.invoke(
+        cli.cli,
+        ["--debug", "deploy", "copy-archives", workspace_dir, "**/*.txt"],
+        obj={},
+    )
     assert result.exit_code == 0
 
     assert os.path.exists(os.path.join(stage_dir, "test.log"))
@@ -106,7 +112,16 @@ def test_deploy_archive(cli_runner, datafiles, responses):
     url = "https://nexus.example.org/service/local/repositories/logs/content-compressed"
     responses.add(responses.POST, "{}/test/path/abc".format(url), json=None, status=201)
     result = cli_runner.invoke(
-        cli.cli, ["--debug", "deploy", "archives", "https://nexus.example.org", "test/path/abc", workspace_dir], obj={}
+        cli.cli,
+        [
+            "--debug",
+            "deploy",
+            "archives",
+            "https://nexus.example.org",
+            "test/path/abc",
+            workspace_dir,
+        ],
+        obj={},
     )
     assert result.exit_code == 0
 
@@ -115,7 +130,14 @@ def test_deploy_archive(cli_runner, datafiles, responses):
     responses.add(responses.POST, "{}/test/fail/path".format(url), status=404)
     result = cli_runner.invoke(
         cli.cli,
-        ["--debug", "deploy", "archives", "https://nexus-fail.example.org", "test/fail/path", workspace_dir],
+        [
+            "--debug",
+            "deploy",
+            "archives",
+            "https://nexus-fail.example.org",
+            "test/fail/path",
+            workspace_dir,
+        ],
         obj={},
     )
     assert result.exit_code == 1
@@ -172,7 +194,10 @@ def test_remove_duplicates_and_sort():
     test_lst = [
         [["file1"], ["file1"]],
         [["file1", "file2"], ["file1", "file2"]],
-        [["file2", "file3", "file5", "file1", "file4"], ["file1", "file2", "file3", "file4", "file5"]],
+        [
+            ["file2", "file3", "file5", "file1", "file4"],
+            ["file1", "file2", "file3", "file4", "file5"],
+        ],
         [["file2", "file3", "file2", "file3", "file4"], ["file2", "file3", "file4"]],
         [
             [
@@ -283,7 +308,9 @@ def test_deploy_logs(cli_runner, datafiles, responses):
 
     # Test successful upload
     build_url = "https://jenkins.example.org/job/builder-check-poms/204"
-    nexus_url = "https://nexus.example.org/service/local/repositories/logs/content-compressed"
+    nexus_url = (
+        "https://nexus.example.org/service/local/repositories/logs/content-compressed"
+    )
     responses.add(responses.GET, "{}/consoleText".format(build_url), status=201)
     responses.add(
         responses.GET,
@@ -293,7 +320,16 @@ def test_deploy_logs(cli_runner, datafiles, responses):
     )
     responses.add(responses.POST, "{}/test/log/upload".format(nexus_url), status=201)
     result = cli_runner.invoke(
-        cli.cli, ["--debug", "deploy", "logs", "https://nexus.example.org", "test/log/upload", build_url], obj={}
+        cli.cli,
+        [
+            "--debug",
+            "deploy",
+            "logs",
+            "https://nexus.example.org",
+            "test/log/upload",
+            build_url,
+        ],
+        obj={},
     )
     assert result.exit_code == 0
 
@@ -308,10 +344,12 @@ def test_deploy_nexus_zip(cli_runner, datafiles, responses):
     nexus_path = "test/path"
 
     # Test success
-    success_upload_url = "{}/service/local/repositories/{}/content-compressed/{}".format(
-        nexus_url,
-        nexus_repo,
-        nexus_path,
+    success_upload_url = (
+        "{}/service/local/repositories/{}/content-compressed/{}".format(
+            nexus_url,
+            nexus_repo,
+            nexus_path,
+        )
     )
     responses.add(responses.POST, success_upload_url, status=201)
     result = cli_runner.invoke(
@@ -557,7 +595,10 @@ def test_nexus_stage_repo_close(responses, mocker):
     url = "service/local/staging/profiles"
 
     responses.add(
-        responses.POST, "http://valid.create.post/{}/{}/finish".format(url, "93fb68073c18"), body=None, status=201
+        responses.POST,
+        "http://valid.create.post/{}/{}/finish".format(url, "93fb68073c18"),
+        body=None,
+        status=201,
     )
     deploy_sys.nexus_stage_repo_close("valid.create.post", "93fb68073c18", "test1-1027")
 
@@ -567,7 +608,10 @@ def test_nexus_stage_repo_close(responses, mocker):
         </html>
         """
     responses.add(
-        responses.POST, "http://site.not.found/{}/{}/finish".format(url, "INVALID"), body=xml_site_not_found, status=404
+        responses.POST,
+        "http://site.not.found/{}/{}/finish".format(url, "INVALID"),
+        body=xml_site_not_found,
+        status=404,
     )
     with pytest.raises(ValueError) as excinfo:
         deploy_sys.nexus_stage_repo_close("site.not.found", "INVALID", "test1-1027")
@@ -586,7 +630,9 @@ def test_nexus_stage_repo_close(responses, mocker):
         status=500,
     )
     with pytest.raises(ValueError) as excinfo:
-        deploy_sys.nexus_stage_repo_close("missing.staging.repository", "INVALID", "test1-1027")
+        deploy_sys.nexus_stage_repo_close(
+            "missing.staging.repository", "INVALID", "test1-1027"
+        )
     assert "missing.staging.repository" in str(excinfo.value)
 
     xml_staging_already_closed = """
@@ -602,7 +648,9 @@ def test_nexus_stage_repo_close(responses, mocker):
         status=500,
     )
     with pytest.raises(ValueError) as excinfo:
-        deploy_sys.nexus_stage_repo_close("staging.already.closed", "INVALID", "test1-1027")
+        deploy_sys.nexus_stage_repo_close(
+            "staging.already.closed", "INVALID", "test1-1027"
+        )
     assert "staging.already.closed" in str(excinfo.value)
 
     xml_other_error_occured = """
@@ -617,7 +665,9 @@ def test_nexus_stage_repo_close(responses, mocker):
         status=303,
     )
     with pytest.raises(ValueError) as excinfo:
-        deploy_sys.nexus_stage_repo_close("other.error.occured", "INVALID", "test1-1027")
+        deploy_sys.nexus_stage_repo_close(
+            "other.error.occured", "INVALID", "test1-1027"
+        )
     assert "other.error.occured" in str(excinfo.value)
 
 
@@ -628,7 +678,10 @@ def test_nexus_stage_repo_create(responses, mocker):
 
     xml_created = "<stagedRepositoryId>test1-1030</stagedRepositoryId>"
     responses.add(
-        responses.POST, "http://valid.create.post/{}/{}/start".format(url, "93fb68073c18"), body=xml_created, status=201
+        responses.POST,
+        "http://valid.create.post/{}/{}/start".format(url, "93fb68073c18"),
+        body=xml_created,
+        status=201,
     )
     res = deploy_sys.nexus_stage_repo_create("valid.create.post", "93fb68073c18")
     assert res == "test1-1030"
@@ -649,9 +702,7 @@ def test_nexus_stage_repo_create(responses, mocker):
         res = deploy_sys.nexus_stage_repo_create("profile.id_not.exist", "INVALID")
     assert "profile.id.not.exist" in str(excinfo.value)
 
-    xml_other_create_error = (
-        "<nexus-error><errors><error><id>*</id><msg>OTHER create error.</msg></error></errors></nexus-error>"
-    )
+    xml_other_create_error = "<nexus-error><errors><error><id>*</id><msg>OTHER create error.</msg></error></errors></nexus-error>"
     responses.add(
         responses.POST,
         "http://other.create.error/{}/{}/start".format(url, "INVALID"),
@@ -714,7 +765,10 @@ def test_nexus_stage_repo_create(responses, mocker):
         </html>
         """
     responses.add(
-        responses.POST, "http://site.not.found/{}/{}/start".format(url, "INVALID"), body=xml_site_not_found, status=404
+        responses.POST,
+        "http://site.not.found/{}/{}/start".format(url, "INVALID"),
+        body=xml_site_not_found,
+        status=404,
     )
     with pytest.raises(ValueError) as excinfo:
         res = deploy_sys.nexus_stage_repo_create("site.not.found", "INVALID")
@@ -734,8 +788,12 @@ def test__upload_maven_file_to_nexus(responses, mocker):
     packaging = "tar.xz"
 
     test_url = "http://all.ok.upload:8081"
-    responses.add(responses.POST, "{}/{}".format(test_url, common_urlpart), body=None, status=201)
-    deploy_sys.upload_maven_file_to_nexus(test_url, nexus_repo_id, group_id, artifact_id, version, packaging, zip_file)
+    responses.add(
+        responses.POST, "{}/{}".format(test_url, common_urlpart), body=None, status=201
+    )
+    deploy_sys.upload_maven_file_to_nexus(
+        test_url, nexus_repo_id, group_id, artifact_id, version, packaging, zip_file
+    )
 
     xml_other_error = """
         <nexus-error><errors><error>
@@ -744,7 +802,12 @@ def test__upload_maven_file_to_nexus(responses, mocker):
         </error></errors></nexus-error>
         """
     test_url = "http://something.went.wrong:8081"
-    responses.add(responses.POST, "{}/{}".format(test_url, common_urlpart), body=xml_other_error, status=405)
+    responses.add(
+        responses.POST,
+        "{}/{}".format(test_url, common_urlpart),
+        body=xml_other_error,
+        status=405,
+    )
     with pytest.raises(requests.HTTPError) as excinfo:
         deploy_sys.upload_maven_file_to_nexus(
             test_url, nexus_repo_id, group_id, artifact_id, version, packaging, zip_file
@@ -824,12 +887,17 @@ def test_deploy_nexus_stage(datafiles, responses):
     # Setup for nexus_stage_repo_create
     xml_created = "<stagedRepositoryId>{}</stagedRepositoryId>".format(repo_id)
     responses.add(
-        responses.POST, "{}/{}/{}/start".format(url, url_repo, staging_profile_id), body=xml_created, status=201
+        responses.POST,
+        "{}/{}/{}/start".format(url, url_repo, staging_profile_id),
+        body=xml_created,
+        status=201,
     )
 
     # Setup for deploy_nexus with no snapshot
     os.chdir(str(datafiles))
-    nexus_deploy_url = "{}/service/local/staging/deployByRepositoryId/{}".format(url, repo_id)
+    nexus_deploy_url = "{}/service/local/staging/deployByRepositoryId/{}".format(
+        url, repo_id
+    )
     deploy_dir = "m2repo"
     test_files = [
         "4.0.3-SNAPSHOT/odlparent-lite-4.0.3-20181120.113136-1.pom",
@@ -841,7 +909,12 @@ def test_deploy_nexus_stage(datafiles, responses):
         responses.add(responses.PUT, success_upload_url, status=201)
 
     # Setup for nexus_stage_repo_close
-    responses.add(responses.POST, "{}/{}/{}/finish".format(url, url_repo, staging_profile_id), body=None, status=201)
+    responses.add(
+        responses.POST,
+        "{}/{}/{}/finish".format(url, url_repo, staging_profile_id),
+        body=None,
+        status=201,
+    )
 
     # Execute test, should not return anything for successful run.
     deploy_sys.deploy_nexus_stage(url, staging_profile_id, deploy_dir)

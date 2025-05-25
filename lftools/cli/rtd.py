@@ -99,10 +99,25 @@ def project_version_details(ctx, project_slug, version_slug):
 @click.argument("programming-language")
 @click.argument("language")
 @click.pass_context
-def project_create(ctx, project_name, repository_url, repository_type, homepage, programming_language, language):
+def project_create(
+    ctx,
+    project_name,
+    repository_url,
+    repository_type,
+    homepage,
+    programming_language,
+    language,
+):
     """Create a new project."""
     r = readthedocs.ReadTheDocs()
-    data = r.project_create(project_name, repository_url, repository_type, homepage, programming_language, language)
+    data = r.project_create(
+        project_name,
+        repository_url,
+        repository_type,
+        homepage,
+        programming_language,
+        language,
+    )
     log.info(pformat(data))
 
 
@@ -202,7 +217,11 @@ def subproject_delete(ctx, project_slug, subproject_slug):
     r = readthedocs.ReadTheDocs()
     data = r.subproject_delete(project_slug, subproject_slug)
     if data:
-        log.info("Successfully removed the {} {} relationship".format(project_slug, subproject_slug))
+        log.info(
+            "Successfully removed the {} {} relationship".format(
+                project_slug, subproject_slug
+            )
+        )
     else:
         log.error("Request failed. Is there a subproject relationship?")
 

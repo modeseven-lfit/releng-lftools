@@ -33,7 +33,9 @@ def user_list(ctx):
     """List users."""
     r = ctx.obj["nexus2"]
     data = r.user_list()
-    log.info(tabulate(data, headers=["ID", "First Name", "Last Name", "Status", "Roles"]))
+    log.info(
+        tabulate(data, headers=["ID", "First Name", "Last Name", "Status", "Roles"])
+    )
 
 
 @user.command(name="add")

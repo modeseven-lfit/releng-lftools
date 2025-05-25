@@ -101,7 +101,9 @@ class Nexus:
         r = requests.post(url, auth=self.auth, headers=self.headers, data=json_data)
 
         if r.status_code != requests.codes.created:
-            raise Exception("Target not created for '{}', code '{}'".format(name, r.status_code))
+            raise Exception(
+                "Target not created for '{}', code '{}'".format(name, r.status_code)
+            )
 
         return r.json()["data"]["id"]
 
@@ -153,7 +155,9 @@ class Nexus:
         privileges = r.json()
 
         if r.status_code != requests.codes.created:
-            raise Exception("Privilege not created for '{}', code '{}'".format(name, r.status_code))
+            raise Exception(
+                "Privilege not created for '{}', code '{}'".format(name, r.status_code)
+            )
 
         return privileges["data"][0]["id"]
 
@@ -200,10 +204,16 @@ class Nexus:
                     error_msgs += error["msg"] + "\n"
                 raise Exception(
                     "Role not created for '{}', code '{}', failed "
-                    "with the following errors: {}".format(name, r.status_code, error_msgs)
+                    "with the following errors: {}".format(
+                        name, r.status_code, error_msgs
+                    )
                 )
             else:
-                raise Exception("Role not created for '{}', code '{}'".format(role_id, r.status_code))
+                raise Exception(
+                    "Role not created for '{}', code '{}'".format(
+                        role_id, r.status_code
+                    )
+                )
 
         return r.json()["data"]["id"]
 
@@ -248,7 +258,9 @@ class Nexus:
         user = requests.post(url, auth=self.auth, headers=self.headers, data=json_data)
 
         if user.status_code != requests.codes.created:
-            raise Exception("User not created for '{}', code '{}'".format(name, user.status_code))
+            raise Exception(
+                "User not created for '{}', code '{}'".format(name, user.status_code)
+            )
 
     def get_repo_group(self, name):
         """Get the repository ID for a repo group that has a specific name."""

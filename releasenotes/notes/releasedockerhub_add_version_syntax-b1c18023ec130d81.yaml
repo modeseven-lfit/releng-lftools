@@ -11,4 +11,3 @@ features:
 
     Sample command
     lftools nexus docker releasedockerhub -o onap -r aai -v --version_regexp "^\d+.\d+.\d+$"
-

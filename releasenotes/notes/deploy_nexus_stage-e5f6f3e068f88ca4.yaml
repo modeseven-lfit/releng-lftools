@@ -10,5 +10,3 @@ deprecations:
   - |
     shell/deploy script's deploy_nexus_stage
     function is now deprecated and will be removed in a future release.
-
-

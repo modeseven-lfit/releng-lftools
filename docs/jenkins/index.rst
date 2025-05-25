@@ -9,4 +9,3 @@ bash. It supports the following Jenkins specific commands.
     :maxdepth: 2
 
     plugins
-

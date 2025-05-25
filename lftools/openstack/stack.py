@@ -37,7 +37,11 @@ def create(os_cloud, name, template_file, parameter_file, timeout=900, tries=2):
     for i in range(tries):
         try:
             stack = cloud.create_stack(
-                name, template_file=template_file, environment_files=[parameter_file], timeout=timeout, rollback=False
+                name,
+                template_file=template_file,
+                environment_files=[parameter_file],
+                timeout=timeout,
+                rollback=False,
             )
         except OpenStackCloudHTTPError as e:
             if cloud.search_stacks(name):
@@ -59,7 +63,11 @@ def create(os_cloud, name, template_file, parameter_file, timeout=900, tries=2):
                 stack_success = True
                 break
             elif stack.status == "CREATE_FAILED":
-                print("WARN: Failed to initialize stack. Reason: {}".format(stack.status_reason))
+                print(
+                    "WARN: Failed to initialize stack. Reason: {}".format(
+                        stack.status_reason
+                    )
+                )
                 if delete(os_cloud, stack_id):
                     break
             else:
@@ -148,7 +156,11 @@ def delete(os_cloud, name_or_id, force, timeout=900):
         elif stack.status == "DELETE_IN_PROGRESS":
             print("Waiting for stack to delete...")
         elif stack.status == "DELETE_FAILED":
-            print("WARN: Failed to delete $STACK_NAME. Reason: {}".format(stack.status_reason))
+            print(
+                "WARN: Failed to delete $STACK_NAME. Reason: {}".format(
+                    stack.status_reason
+                )
+            )
             print("Retrying delete...")
             cloud.delete_stack(name_or_id)
         else:
@@ -196,7 +208,11 @@ def delete_stale(os_cloud, jenkins_servers):
 
     log.debug("Active stacks")
     for stack in stacks:
-        if stack.status == "CREATE_COMPLETE" or stack.status == "CREATE_FAILED" or stack.status == "DELETE_FAILED":
+        if (
+            stack.status == "CREATE_COMPLETE"
+            or stack.status == "CREATE_FAILED"
+            or stack.status == "DELETE_FAILED"
+        ):
             log.debug("    {}".format(stack.stack_name))
 
             if stack.status == "DELETE_FAILED":

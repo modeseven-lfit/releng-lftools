@@ -8,6 +8,7 @@
 # http://www.eclipse.org/legal/epl-v10.html
 ##############################################################################
 """Jenkins."""
+
 from __future__ import annotations
 
 __author__ = "Thanh Ha"
@@ -25,7 +26,9 @@ log: logging.Logger = logging.getLogger(__name__)
 def jjb_ini() -> str | None:
     """Return jenkins_jobs.ini file location if it exists, None otherwise."""
     global_conf = "/etc/jenkins_jobs/jenkins_jobs.ini"
-    user_conf = os.path.join(os.path.expanduser("~"), ".config", "jenkins_jobs", "jenkins_jobs.ini")
+    user_conf = os.path.join(
+        os.path.expanduser("~"), ".config", "jenkins_jobs", "jenkins_jobs.ini"
+    )
     local_conf = os.path.join(os.getcwd(), "jenkins_jobs.ini")
 
     conf = None
@@ -46,7 +49,11 @@ class Jenkins:
     """lftools Jenkins object."""
 
     def __init__(
-        self, server: str, user: Optional[str] = None, password: Optional[str] = None, config_file: Optional[str] = None
+        self,
+        server: str,
+        user: Optional[str] = None,
+        password: Optional[str] = None,
+        config_file: Optional[str] = None,
     ) -> None:
         """Initialize a Jenkins object."""
         self.config_file: Optional[str] = config_file
@@ -63,11 +70,15 @@ class Jenkins:
                     password = config.get(server, "password")
                     server = config.get(server, "url")
                 else:
-                    log.error("[{}] section not found in {}".format(server, self.config_file))
+                    log.error(
+                        "[{}] section not found in {}".format(server, self.config_file)
+                    )
             else:
                 log.debug("jenkins_jobs.ini not found in any of the default paths.")
                 server = "https://localhost:8080"
 
-        self.server: jenkins.Jenkins = jenkins.Jenkins(server, username=user, password=password)  # type: ignore
+        self.server: jenkins.Jenkins = jenkins.Jenkins(
+            server, username=user, password=password
+        )  # type: ignore
 
         self.url: str = server

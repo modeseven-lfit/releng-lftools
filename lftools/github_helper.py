@@ -65,7 +65,9 @@ def helper_list(ctx, organization, repos, audit, full, teams, team, repofeatures
     if repofeatures:
         repos = org.get_repos()
         for repo in repos:
-            log.info("{} wiki:{} issues:{}".format(repo.name, repo.has_wiki, repo.has_issues))
+            log.info(
+                "{} wiki:{} issues:{}".format(repo.name, repo.has_wiki, repo.has_issues)
+            )
             issues = repo.get_issues
             for issue in issues():
                 log.info("{}".format(issue))

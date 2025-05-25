@@ -42,9 +42,14 @@ def image(ctx):
 
 @click.command()
 @click.option(
-    "--ci-managed", type=bool, default=False, help="Filter only images that have the ci_managed=yes metadata set."
+    "--ci-managed",
+    type=bool,
+    default=False,
+    help="Filter only images that have the ci_managed=yes metadata set.",
 )
-@click.option("--days", type=int, default=0, help="Find images older than or equal to days.")
+@click.option(
+    "--days", type=int, default=0, help="Find images older than or equal to days."
+)
 @click.option("--hide-public", type=bool, default=False, help="Ignore public images.")
 @click.option(
     "--clouds",
@@ -58,19 +63,32 @@ def image(ctx):
 @click.pass_context
 def image_cleanup(ctx, days, hide_public, ci_managed, clouds):
     """Cleanup old images."""
-    os_image.cleanup(ctx.obj["os_cloud"], ci_managed=ci_managed, days=days, hide_public=hide_public, clouds=clouds)
+    os_image.cleanup(
+        ctx.obj["os_cloud"],
+        ci_managed=ci_managed,
+        days=days,
+        hide_public=hide_public,
+        clouds=clouds,
+    )
 
 
 @click.command()
 @click.option(
-    "--ci-managed", type=bool, default=False, help="Filter only images that have the ci_managed=yes metadata set."
+    "--ci-managed",
+    type=bool,
+    default=False,
+    help="Filter only images that have the ci_managed=yes metadata set.",
 )
-@click.option("--days", type=int, default=0, help="Find images older than or equal to days.")
+@click.option(
+    "--days", type=int, default=0, help="Find images older than or equal to days."
+)
 @click.option("--hide-public", type=bool, default=False, help="Ignore public images.")
 @click.pass_context
 def image_list(ctx, days, hide_public, ci_managed):
     """List cloud images."""
-    os_image.list(ctx.obj["os_cloud"], ci_managed=ci_managed, days=days, hide_public=hide_public)
+    os_image.list(
+        ctx.obj["os_cloud"], ci_managed=ci_managed, days=days, hide_public=hide_public
+    )
 
 
 @click.command()
@@ -85,7 +103,12 @@ def share(ctx, image, dest):
 @click.command()
 @click.argument("image")
 @click.argument("name", nargs=-1, required=True)
-@click.option("--disk-format", type=str, default="raw", help="Disk format of image. (default: raw)")
+@click.option(
+    "--disk-format",
+    type=str,
+    default="raw",
+    help="Disk format of image. (default: raw)",
+)
 @click.pass_context
 def upload(ctx, image, name, disk_format):
     """Upload image to OpenStack cloud."""
@@ -134,7 +157,9 @@ def server(ctx):
 
 
 @click.command(name="cleanup")
-@click.option("--days", type=int, default=0, help="Find servers older than or equal to days.")
+@click.option(
+    "--days", type=int, default=0, help="Find servers older than or equal to days."
+)
 @click.pass_context
 def server_cleanup(ctx, days):
     """Cleanup old servers."""
@@ -142,7 +167,9 @@ def server_cleanup(ctx, days):
 
 
 @click.command()
-@click.option("--days", type=int, default=0, help="Find servers older than or equal to days.")
+@click.option(
+    "--days", type=int, default=0, help="Find servers older than or equal to days."
+)
 @click.pass_context
 def server_list(ctx, days):
     """List cloud servers."""
@@ -151,7 +178,9 @@ def server_list(ctx, days):
 
 @click.command()
 @click.argument("server")
-@click.option("--minutes", type=int, default=0, help="Delete server if older than x minutes.")
+@click.option(
+    "--minutes", type=int, default=0, help="Delete server if older than x minutes."
+)
 @click.pass_context
 def server_remove(ctx, server, minutes):
     """Remove servers."""
@@ -174,18 +203,30 @@ def stack(ctx):
 @click.argument("name")
 @click.argument("template_file")
 @click.argument("parameter_file")
-@click.option("--timeout", type=int, default=900, help="Stack create timeout in seconds.")
+@click.option(
+    "--timeout", type=int, default=900, help="Stack create timeout in seconds."
+)
 @click.option("--tries", type=int, default=2, help="Number of tries before giving up.")
 @click.pass_context
 def create(ctx, name, template_file, parameter_file, timeout, tries):
     """Create stack."""
-    os_stack.create(ctx.obj["os_cloud"], name, template_file, parameter_file, timeout, tries)
+    os_stack.create(
+        ctx.obj["os_cloud"], name, template_file, parameter_file, timeout, tries
+    )
 
 
 @click.command()
 @click.argument("name_or_id")
-@click.option("--force", type=bool, is_flag=True, default=False, help="Ignore timeout and continue with next stack.")
-@click.option("--timeout", type=int, default=900, help="Stack delete timeout in seconds.")
+@click.option(
+    "--force",
+    type=bool,
+    is_flag=True,
+    default=False,
+    help="Ignore timeout and continue with next stack.",
+)
+@click.option(
+    "--timeout", type=int, default=900, help="Stack delete timeout in seconds."
+)
 @click.pass_context
 def delete(ctx, name_or_id, force, timeout):
     """Delete stack."""
@@ -227,7 +268,9 @@ def volume(ctx):
 
 
 @click.command()
-@click.option("--days", type=int, default=0, help="Find volumes older than or equal to days.")
+@click.option(
+    "--days", type=int, default=0, help="Find volumes older than or equal to days."
+)
 @click.pass_context
 def volume_cleanup(ctx, days):
     """Cleanup old volumes."""
@@ -235,7 +278,9 @@ def volume_cleanup(ctx, days):
 
 
 @click.command()
-@click.option("--days", type=int, default=0, help="Find volumes older than or equal to days.")
+@click.option(
+    "--days", type=int, default=0, help="Find volumes older than or equal to days."
+)
 @click.pass_context
 def volume_list(ctx, days):
     """List cloud volumes."""
@@ -244,7 +289,9 @@ def volume_list(ctx, days):
 
 @click.command()
 @click.argument("volume_id")
-@click.option("--minutes", type=int, default=0, help="Delete volumes if older than x minutes.")
+@click.option(
+    "--minutes", type=int, default=0, help="Delete volumes if older than x minutes."
+)
 @click.pass_context
 def volume_remove(ctx, volume_id, minutes):
     """Remove volumes."""

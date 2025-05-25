@@ -85,7 +85,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "mypy"
+    "mypy",
+    "build"
 ]
 
 docs = [

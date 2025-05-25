@@ -56,7 +56,9 @@ def test_create_roles(datafiles, responses, nexus2_obj_create):
 
 
 @pytest.mark.datafiles(os.path.join(FIXTURE_DIR, "nexus"))
-def test_release_staging_repos(datafiles, responses, mocker, nexus2_obj_create, mock_get_credentials):
+def test_release_staging_repos(
+    datafiles, responses, mocker, nexus2_obj_create, mock_get_credentials
+):
     """Test create_roles() method with good config."""
     os.chdir(str(datafiles))
     baseurl = "http://nexus.localhost/service/local"
@@ -95,8 +97,16 @@ def test_create_repo_target_regex():
             "org.opendaylight.honeycomb.vbd",
             "/org/opendaylight/honeycomb/vbd/odl-vbd/1.4.0-SNAPSHOT/odl-vbd-1.4.0-20180422.024456-12-features.xml",
         ],
-        [False, "org.openecomp.mso", "/org/openecomp/mso/1.1.0-SNAPSHOT/mso-1.1.0-20170606.171056-26.pom"],
-        [False, "org.onap.dcaegen2", "/org/onap.dcaegen2/1.2.0-SNAPSHOT/dcaegen2-1.2.0-20180403.182529-10.pom"],
+        [
+            False,
+            "org.openecomp.mso",
+            "/org/openecomp/mso/1.1.0-SNAPSHOT/mso-1.1.0-20170606.171056-26.pom",
+        ],
+        [
+            False,
+            "org.onap.dcaegen2",
+            "/org/onap.dcaegen2/1.2.0-SNAPSHOT/dcaegen2-1.2.0-20180403.182529-10.pom",
+        ],
         [False, "io.fd.vpp", "/io/fd/vpp/jvpp/16.06/jvpp-16.06.jar"],
         [True, "org.o-ran-sc.org", "/org/o-ran-sc/org/"],
         [True, "org.o-ran-sc.org", "/org/o-ran-sc/org/ric-plt-lib-rmr"],
@@ -110,8 +120,16 @@ def test_create_repo_target_regex():
             "org.opendaylight.honeycomb.vbd",
             "/org/opendaylight/honeycomb/vbd/odl-vbd/1.4.0-SNAPSHOT/odl-vbd-1.4.0-20180422.024456-12-features.xml",
         ],
-        [True, "org.openecomp.mso", "/org/openecomp/mso/1.1.0-SNAPSHOT/mso-1.1.0-20170606.171056-26.pom"],
-        [True, "org.onap.dcaegen2", "/org/onap/dcaegen2/1.2.0-SNAPSHOT/dcaegen2-1.2.0-20180403.182529-10.pom"],
+        [
+            True,
+            "org.openecomp.mso",
+            "/org/openecomp/mso/1.1.0-SNAPSHOT/mso-1.1.0-20170606.171056-26.pom",
+        ],
+        [
+            True,
+            "org.onap.dcaegen2",
+            "/org/onap/dcaegen2/1.2.0-SNAPSHOT/dcaegen2-1.2.0-20180403.182529-10.pom",
+        ],
         [True, "io.fd.vpp", "/io/fd/vpp/jvpp/16.06/jvpp-16.06.jar"],
     ]
 
@@ -130,8 +148,14 @@ def test_create_repo_target_regex():
             "org.opendaylight.honeycomb.vbd",
             "/org/opendaylight/honeycomb/vbd/odl-vbd/1.4.0-SNAPSHOT/odl-vbd-1.4.0-20180422.024456-12-features.xml",
         ],
-        ["org.openecomp.mso", "/org/openecomp/mso/1.1.0-SNAPSHOT/mso-1.1.0-20170606.171056-26.pom"],
-        ["org.onap.dcaegen2", "/org/onap/dcaegen2/1.2.0-SNAPSHOT/dcaegen2-1.2.0-20180403.182529-10.pom"],
+        [
+            "org.openecomp.mso",
+            "/org/openecomp/mso/1.1.0-SNAPSHOT/mso-1.1.0-20170606.171056-26.pom",
+        ],
+        [
+            "org.onap.dcaegen2",
+            "/org/onap/dcaegen2/1.2.0-SNAPSHOT/dcaegen2-1.2.0-20180403.182529-10.pom",
+        ],
         ["io.fd.vpp", "/io/fd/vpp/jvpp/16.06/jvpp-16.06.jar"],
     ]
 

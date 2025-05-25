@@ -37,10 +37,25 @@ def infofile(ctx):
 @click.command(name="create-info-file")
 @click.argument("gerrit_url", required=True)
 @click.argument("gerrit_project", required=True)
-@click.option("--directory", type=str, required=False, default="r", help="custom gerrit directory, eg not /r/")
-@click.option("--empty", is_flag=True, required=False, help="Create info file for uncreated project.")
 @click.option(
-    "--tsc_approval", type=str, required=False, default="missing", help="optionally provde a tsc approval link"
+    "--directory",
+    type=str,
+    required=False,
+    default="r",
+    help="custom gerrit directory, eg not /r/",
+)
+@click.option(
+    "--empty",
+    is_flag=True,
+    required=False,
+    help="Create info file for uncreated project.",
+)
+@click.option(
+    "--tsc_approval",
+    type=str,
+    required=False,
+    default="missing",
+    help="optionally provde a tsc approval link",
 )
 @click.pass_context
 def create_info_file(ctx, gerrit_url, gerrit_project, directory, empty, tsc_approval):
@@ -126,9 +141,7 @@ meetings:
       server: 'freenode.net'
       channel: '#{1}'
       repeats: ''
-      time: ''""".format(
-        project_underscored, umbrella, umbrella_tld, date
-    )
+      time: ''""".format(project_underscored, umbrella, umbrella_tld, date)
 
     tsc_string = """
 tsc:
@@ -138,9 +151,7 @@ tsc:
         - type: ''
           name: ''
           link: ''
-""".format(
-        tsc_approval
-    )
+""".format(tsc_approval)
     empty_committer = """    - name: ''
       email: ''
       company: ''
@@ -162,7 +173,12 @@ tsc:
 
 @click.command(name="get-committers")
 @click.argument("file", envvar="FILE_NAME", required=True)
-@click.option("--full", type=bool, required=False, help="Output name email and id for all committers in an infofile")
+@click.option(
+    "--full",
+    type=bool,
+    required=False,
+    help="Output name email and id for all committers in an infofile",
+)
 @click.option("--id", type=str, required=False, help="Full output for a specific LFID")
 @click.pass_context
 def get_committers(ctx, file, full, id):
@@ -243,7 +259,13 @@ def sync_committers(ctx, id, info_file, ldap_file, repo):
             exit()
 
         user = ruamel.yaml.comments.CommentedMap(
-            (("name", name), ("company", company), ("email", email), ("id", formatid), ("timezone", timezone))
+            (
+                ("name", name),
+                ("company", company),
+                ("email", email),
+                ("id", formatid),
+                ("timezone", timezone),
+            )
         )
 
         info_data["repositories"][0] = repo
@@ -260,7 +282,12 @@ def sync_committers(ctx, id, info_file, ldap_file, repo):
 @click.argument("endpoint", type=str)
 @click.argument("change_number", type=int)
 @click.option("--tsc", type=str, required=False, help="path to TSC INFO file")
-@click.option("--github_repo", type=str, required=False, help="Provide github repo to Check against a Github Change")
+@click.option(
+    "--github_repo",
+    type=str,
+    required=False,
+    help="Provide github repo to Check against a Github Change",
+)
 @click.pass_context
 def check_votes(ctx, info_file, endpoint, change_number, tsc, github_repo):
     """Check votes on an INFO.yaml change.
@@ -278,7 +305,15 @@ def check_votes(ctx, info_file, endpoint, change_number, tsc, github_repo):
 
     """
 
-    def main(ctx, info_file, endpoint, change_number, tsc, github_repo, majority_of_committers):
+    def main(
+        ctx,
+        info_file,
+        endpoint,
+        change_number,
+        tsc,
+        github_repo,
+        majority_of_committers,
+    ):
         """Function so we can iterate into TSC members after commiter vote has happend."""
         with open(info_file) as file:
             try:
@@ -339,13 +374,29 @@ def check_votes(ctx, info_file, endpoint, change_number, tsc, github_repo):
                     if majority_of_committers == 2:
                         log.info("TSC majority reached auto merging commit")
                     else:
-                        main(ctx, info_file, endpoint, change_number, tsc, github_repo, majority_of_committers)
+                        main(
+                            ctx,
+                            info_file,
+                            endpoint,
+                            change_number,
+                            tsc,
+                            github_repo,
+                            majority_of_committers,
+                        )
             else:
                 log.info("majority not yet reached")
                 sys.exit(1)
 
     majority_of_committers = 0
-    main(ctx, info_file, endpoint, change_number, tsc, github_repo, majority_of_committers)
+    main(
+        ctx,
+        info_file,
+        endpoint,
+        change_number,
+        tsc,
+        github_repo,
+        majority_of_committers,
+    )
 
 
 infofile.add_command(get_committers)

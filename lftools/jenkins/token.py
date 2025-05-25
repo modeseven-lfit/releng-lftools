@@ -8,6 +8,7 @@
 # http://www.eclipse.org/legal/epl-v10.html
 ##############################################################################
 """Jenkins token functions."""
+
 from __future__ import annotations
 
 __author__ = "Thanh Ha"
@@ -19,7 +20,9 @@ import jenkins
 log: logging.Logger = logging.getLogger(__name__)
 
 
-def get_token(name: str, url: str, username: str, password: str, change: bool = False) -> str:
+def get_token(
+    name: str, url: str, username: str, password: str, change: bool = False
+) -> str:
     """Get API token.
 
     This function uses the global username / password for Jenkins from
@@ -33,8 +36,7 @@ def get_token(name: str, url: str, username: str, password: str, change: bool = 
 
     server: jenkins.Jenkins = jenkins.Jenkins(url, username=username, password=password)  # type: ignore
 
-    get_token: str = (
-        """
+    get_token: str = """
 import hudson.model.*
 import jenkins.model.*
 import jenkins.security.*
@@ -43,10 +45,7 @@ User u = User.get("{}")
 ApiTokenProperty t = u.getProperty(ApiTokenProperty.class)
 def token = t.tokenStore.generateNewToken("{}")
 println token.plainValue
-""".format(
-            username, name
-        )
-    )
+""".format(username, name)
 
     token: str = str(server.run_script(get_token))
     return token

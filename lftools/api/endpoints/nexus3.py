@@ -103,7 +103,9 @@ class Nexus3(client.RestApi):
         else:
             return "Failed to create tag {}".format(name)
 
-    def create_user(self, username, first_name, last_name, email_address, roles, password=None):
+    def create_user(
+        self, username, first_name, last_name, email_address, roles, password=None
+    ):
         """Create a new user.
 
         @param username:
@@ -133,7 +135,9 @@ class Nexus3(client.RestApi):
         result = self.post("beta/security/users", data=json_data)[0]
 
         if result.status_code == 200:
-            return "User {} successfully created with password {}".format(username, data["password"])
+            return "User {} successfully created with password {}".format(
+                username, data["password"]
+            )
         else:
             log.error("Failed to create user {}".format(username))
 
@@ -264,7 +268,9 @@ class Nexus3(client.RestApi):
             while token is not None:
                 for tag in result["items"]:
                     list_of_tags.append(tag["name"])
-                result = self.get("v1/tags?continuationToken={}".format(result["continuationToken"]))[1]
+                result = self.get(
+                    "v1/tags?continuationToken={}".format(result["continuationToken"])
+                )[1]
                 token = result["continuationToken"]
         else:
             for tag in result["items"]:
@@ -335,7 +341,9 @@ class Nexus3(client.RestApi):
         """
         data = {"tag": tag}
         json_data = json.dumps(data)
-        result = self.post("v1/staging/move/{}".format(destination_repo), data=json_data)
+        result = self.post(
+            "v1/staging/move/{}".format(destination_repo), data=json_data
+        )
         return result
 
     def read_script(self, name):
@@ -377,9 +385,7 @@ class Nexus3(client.RestApi):
         result = self.get(
             "v1/search/assets?q={}&repository={}".format(query, repository),
             data=json_data,
-        )[
-            1
-        ]["items"]
+        )[1]["items"]
         list_of_assets = []
 
         if details:

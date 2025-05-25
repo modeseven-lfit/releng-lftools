@@ -50,10 +50,14 @@ def get_credentials(settings_file, url=None):
             user = config.get_setting(auth_url, "username")
             password = config.get_setting(auth_url, "password")
         except (configparser.NoOptionError, configparser.NoSectionError):
-            log.info("Failed to get nexus credentials; using empty username " "and password.")
+            log.info(
+                "Failed to get nexus credentials; using empty username and password."
+            )
             return {"nexus": url, "user": "", "password": ""}
         return {"nexus": url, "user": user, "password": password}
-    log.error("Please define a settings.yaml file, or include a url if using " + "lftools.ini")
+    log.error(
+        "Please define a settings.yaml file, or include a url if using " + "lftools.ini"
+    )
     sys.exit(1)
 
 
@@ -98,7 +102,9 @@ def reorder_staged_repos(settings_file):
 
     repo_details = _nexus.get_repo_group_details(repo_id)
 
-    sorted_repos = sorted(repo_details["repositories"], key=lambda k: k["id"], reverse=True)
+    sorted_repos = sorted(
+        repo_details["repositories"], key=lambda k: k["id"], reverse=True
+    )
 
     for repos in sorted_repos:
         del repos["resourceURI"]
@@ -188,7 +194,9 @@ def create_repos(config_file, settings_file, url):
         except LookupError:
             _nexus.create_user(name, email, role_id, password, extra_privs)
 
-    def build_repo(repo, repoId, config, base_groupId, global_privs, email_domain, strict=True):
+    def build_repo(
+        repo, repoId, config, base_groupId, global_privs, email_domain, strict=True
+    ):
         log.info("-> Building for {}.{} in Nexus".format(base_groupId, repo))
         groupId = "{}.{}".format(base_groupId, repo)
         target = util.create_repo_target_regex(groupId, strict)
@@ -204,14 +212,23 @@ def create_repos(config_file, settings_file, url):
             extra_privs = config["extra_privs"]
             log.info("Privileges for this repo:" + ", ".join(extra_privs))
 
-        create_nexus_perms(repoId, [target], email_domain, config["password"], extra_privs)
+        create_nexus_perms(
+            repoId, [target], email_domain, config["password"], extra_privs
+        )
 
         log.info("-> Finished successfully for {}.{}!!\n".format(base_groupId, repo))
 
         if "repositories" in config:
             for sub_repo in config["repositories"]:
                 sub_repo_id = "{}-{}".format(repoId, sub_repo)
-                build_repo(sub_repo, sub_repo_id, config["repositories"][sub_repo], groupId, extra_privs, email_domain)
+                build_repo(
+                    sub_repo,
+                    sub_repo_id,
+                    config["repositories"][sub_repo],
+                    groupId,
+                    extra_privs,
+                    email_domain,
+                )
 
     log.warning("Nexus repo creation started. Aborting now could leave tasks undone!")
     if "global_privs" in config:
@@ -262,7 +279,9 @@ def create_roles(config_file, settings_file):
             if setting not in config[role]:
                 log.error(
                     "{} not defined for role {}. Please ensure that {} "
-                    "are defined for each role in {}".format(setting, role, required_settings, config_file)
+                    "are defined for each role in {}".format(
+                        setting, role, required_settings, config_file
+                    )
                 )
                 sys.exit(1)
 
@@ -285,7 +304,11 @@ def create_roles(config_file, settings_file):
 
     for role in config:
         _nexus.create_role(
-            config[role]["name"], config[role]["privileges"], role, config[role]["description"], config[role]["roles"]
+            config[role]["name"],
+            config[role]["privileges"],
+            role,
+            config[role]["description"],
+            config[role]["roles"],
         )
 
 
@@ -337,20 +360,30 @@ def output_images(images, csv_path=None):
     :arg str csv_path: Path to write out csv file of matching images.
     """
     if not images:
-        log.warning("{}.{} called with empty images list".format(__name__, sys._getframe().f_code.co_name))
+        log.warning(
+            "{}.{} called with empty images list".format(
+                __name__, sys._getframe().f_code.co_name
+            )
+        )
         return
     count = len(images)
     included_keys = images[0].keys()
 
     if csv_path:
         with open(csv_path, "wb") as out_file:
-            dw = csv.DictWriter(out_file, fieldnames=included_keys, quoting=csv.QUOTE_ALL)
+            dw = csv.DictWriter(
+                out_file, fieldnames=included_keys, quoting=csv.QUOTE_ALL
+            )
             dw.writeheader()
             for image in images:
                 dw.writerow({k: v for k, v in image.items() if k in included_keys})
 
     for image in images:
-        log.info("Name: {}\nVersion: {}\nID: {}\n\n".format(image["name"], image["version"], image["id"]))
+        log.info(
+            "Name: {}\nVersion: {}\nID: {}\n\n".format(
+                image["name"], image["version"], image["id"]
+            )
+        )
     log.info("Found {} images matching the query".format(count))
 
 
@@ -436,8 +469,9 @@ def release_staging_repos(repos, verify, nexus_url=""):
 
         if response.status_code != 200:
             raise requests.HTTPError(
-                "Verification of repo failed with the following error:"
-                "\n{}: {}".format(response.status_code, response.text)
+                "Verification of repo failed with the following error:\n{}: {}".format(
+                    response.status_code, response.text
+                )
             )
 
         soup = bs4.BeautifulSoup(response.text, "xml")
@@ -507,7 +541,9 @@ def release_staging_repos(repos, verify, nexus_url=""):
 
             if response.status_code != 201:
                 raise requests.HTTPError(
-                    "Release failed with the following error:" "\n{}: {}".format(response.status_code, response.text)
+                    "Release failed with the following error:\n{}: {}".format(
+                        response.status_code, response.text
+                    )
                 )
             else:
                 log.info("Nexus is now working on releasing {}".format(str(repo)))
@@ -517,7 +553,9 @@ def release_staging_repos(repos, verify, nexus_url=""):
             wait_seconds = 20
             wait_iteration = 0
             consecutive_failures = 0
-            activity_url = "{}/staging/repository/{}/activity".format(_nexus.baseurl, repo)
+            activity_url = "{}/staging/repository/{}/activity".format(
+                _nexus.baseurl, repo
+            )
             sleep(5)  # Quick sleep to allow small repos to release.
             while True:
                 try:
@@ -541,4 +579,8 @@ def release_staging_repos(repos, verify, nexus_url=""):
 
                 sleep(wait_seconds)
                 wait_iteration += 1
-                log.info("Still waiting... {:>4d} seconds gone".format(wait_seconds * wait_iteration))
+                log.info(
+                    "Still waiting... {:>4d} seconds gone".format(
+                        wait_seconds * wait_iteration
+                    )
+                )

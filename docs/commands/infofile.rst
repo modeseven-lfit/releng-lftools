@@ -48,4 +48,3 @@ API for check votes requires a [github] section in ~/.config/lftools/lftools.ini
 
    [github]
    token = REDACTED
-

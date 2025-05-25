@@ -33,7 +33,9 @@ def role_list(ctx):
     """List users."""
     r = ctx.obj["nexus2"]
     data = r.role_list()
-    log.info(tabulate(data, headers=["ID", "Name", "Roles", "Privileges"], tablefmt="grid"))
+    log.info(
+        tabulate(data, headers=["ID", "Name", "Roles", "Privileges"], tablefmt="grid")
+    )
 
 
 @role.command(name="create")
@@ -46,7 +48,9 @@ def role_list(ctx):
 def role_create(ctx, role_id, role_name, role_description, roles_list, privileges_list):
     """Create a new role."""
     r = ctx.obj["nexus2"]
-    data = r.role_create(role_id, role_name, role_description, roles_list, privileges_list)
+    data = r.role_create(
+        role_id, role_name, role_description, roles_list, privileges_list
+    )
     log.info(data)
 
 

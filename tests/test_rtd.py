@@ -17,7 +17,11 @@ import responses
 
 import lftools.api.endpoints.readthedocs as client
 
-creds = {"authtype": "token", "endpoint": "https://readthedocs.org/api/v3/", "token": "xyz"}
+creds = {
+    "authtype": "token",
+    "endpoint": "https://readthedocs.org/api/v3/",
+    "token": "xyz",
+}
 rtd = client.ReadTheDocs(creds=creds)
 
 FIXTURE_DIR = os.path.join(
@@ -34,7 +38,12 @@ def test_project_list(datafiles):
     os.chdir(str(datafiles))
     json_file = open("project_list.json", "r")
     json_data = json.loads(json_file.read())
-    responses.add(responses.GET, url="https://readthedocs.org/api/v3/projects/", json=json_data, status=200)
+    responses.add(
+        responses.GET,
+        url="https://readthedocs.org/api/v3/projects/",
+        json=json_data,
+        status=200,
+    )
     assert "TestProject1" in rtd.project_list()
 
 
@@ -47,7 +56,10 @@ def test_project_details(datafiles):
     json_file = open("project_details.json", "r")
     json_data = json.loads(json_file.read())
     responses.add(
-        responses.GET, url="https://readthedocs.org/api/v3/projects/TestProject1/", json=json_data, status=200
+        responses.GET,
+        url="https://readthedocs.org/api/v3/projects/TestProject1/",
+        json=json_data,
+        status=200,
     )
     assert "slug" in rtd.project_details("TestProject1")
 
@@ -108,9 +120,19 @@ def test_project_create():
         "programming_language": "py",
         "language": "en",
     }
-    responses.add(responses.POST, url="https://readthedocs.org/api/v3/projects/", json=data, status=201)
+    responses.add(
+        responses.POST,
+        url="https://readthedocs.org/api/v3/projects/",
+        json=data,
+        status=201,
+    )
     assert rtd.project_create(
-        "TestProject1", "https://repository_url", "my_repo_type", "https://homepageurl", "py", "en"
+        "TestProject1",
+        "https://repository_url",
+        "my_repo_type",
+        "https://homepageurl",
+        "py",
+        "en",
     )
 
 
@@ -199,7 +221,9 @@ def test_subproject_details(datafiles):
 @responses.activate
 def test_subproject_create():
     responses.add(
-        responses.POST, url="https://readthedocs.org/api/v3/projects/TestProject1/subprojects/", status=201  # NOQA
+        responses.POST,
+        url="https://readthedocs.org/api/v3/projects/TestProject1/subprojects/",
+        status=201,  # NOQA
     )
     assert rtd.subproject_create("TestProject1", "testproject2")
 
