@@ -28,7 +28,9 @@ log = logging.getLogger(__name__)
 
 
 @click.group()
-@click.option("-c", "--conf", type=str, default=None, help="Path to jenkins_jobs.ini config.")
+@click.option(
+    "-c", "--conf", type=str, default=None, help="Path to jenkins_jobs.ini config."
+)
 @click.option(
     "-s",
     "--server",
@@ -166,7 +168,10 @@ def quiet_down(ctx, n):
 
 @click.command()
 @click.option(
-    "--force", is_flag=True, default=False, help="Forcibly remove nodes, use only if the non-force version fails."
+    "--force",
+    is_flag=True,
+    default=False,
+    help="Forcibly remove nodes, use only if the non-force version fails.",
 )
 @click.pass_context
 def remove_offline_nodes(ctx, force):

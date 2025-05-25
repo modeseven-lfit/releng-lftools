@@ -53,7 +53,8 @@ def _filter_images(images, days=0, hide_public=False, ci_managed=True):
         except AttributeError:
             bad_attribute = "image.protected"
         if days and (
-            datetime.strptime(image.created_at, "%Y-%m-%dT%H:%M:%SZ") >= datetime.now() - timedelta(days=days)
+            datetime.strptime(image.created_at, "%Y-%m-%dT%H:%M:%SZ")
+            >= datetime.now() - timedelta(days=days)
         ):
             continue
 
@@ -96,13 +97,17 @@ def cleanup(os_cloud, days=0, hide_public=False, ci_managed=True, clouds=None):
             # Safely handle potentially problematic attributes
             try:
                 if image.is_protected:
-                    log.warning("Image {} is protected. Cannot remove...".format(image.name))
+                    log.warning(
+                        "Image {} is protected. Cannot remove...".format(image.name)
+                    )
                     continue
             except AttributeError:
                 _log_bad_attribute("image.is_protected")
             try:
                 if image.protected:
-                    log.warning("Image {} is protected. Cannot remove...".format(image.name))
+                    log.warning(
+                        "Image {} is protected. Cannot remove...".format(image.name)
+                    )
                     continue
             except AttributeError:
                 _log_bad_attribute("image.protected")
@@ -112,7 +117,11 @@ def cleanup(os_cloud, days=0, hide_public=False, ci_managed=True, clouds=None):
                 continue
 
             if project_info["id"] != image.owner:
-                log.warning("Image {} not owned by project {}. Cannot remove...".format(image.name, cloud.config._name))
+                log.warning(
+                    "Image {} not owned by project {}. Cannot remove...".format(
+                        image.name, cloud.config._name
+                    )
+                )
                 continue
 
             try:
@@ -127,7 +136,9 @@ def cleanup(os_cloud, days=0, hide_public=False, ci_managed=True, clouds=None):
 
             if not result:
                 log.warning(
-                    'Failed to remove "{}" from {}. Possibly already deleted.'.format(image.name, cloud.config._name)
+                    'Failed to remove "{}" from {}. Possibly already deleted.'.format(
+                        image.name, cloud.config._name
+                    )
                 )
             else:
                 log.info('Removed "{}" from {}.'.format(image.name, cloud.config._name))
@@ -153,7 +164,19 @@ def share(os_cloud, image, clouds):
     """Share image with another tenant."""
 
     def _get_image_id(os_cloud, image):
-        cmd = ["openstack", "--os-cloud", os_cloud, "image", "list", "--name", image, "-f", "value", "-c", "ID"]
+        cmd = [
+            "openstack",
+            "--os-cloud",
+            os_cloud,
+            "image",
+            "list",
+            "--name",
+            image,
+            "-f",
+            "value",
+            "-c",
+            "ID",
+        ]
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = p.communicate()
         log.debug("exit code: {}".format(p.returncode))
@@ -175,7 +198,17 @@ def share(os_cloud, image, clouds):
             sys.exit(1)
 
     def _get_token(cloud):
-        cmd = ["openstack", "--os-cloud", cloud, "token", "issue", "-c", "project_id", "-f", "value"]
+        cmd = [
+            "openstack",
+            "--os-cloud",
+            cloud,
+            "token",
+            "issue",
+            "-c",
+            "project_id",
+            "-f",
+            "value",
+        ]
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = p.communicate()
         log.debug("exit code: {}".format(p.returncode))
@@ -189,7 +222,16 @@ def share(os_cloud, image, clouds):
 
     def _share_to_cloud(os_cloud, image, token):
         log.debug("Sharing image {} to {}".format(image, token))
-        cmd = ["openstack", "--os-cloud", os_cloud, "image", "add", "project", image, token]
+        cmd = [
+            "openstack",
+            "--os-cloud",
+            os_cloud,
+            "image",
+            "add",
+            "project",
+            image,
+            token,
+        ]
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = p.communicate()
         log.debug("exit code: {}".format(p.returncode))

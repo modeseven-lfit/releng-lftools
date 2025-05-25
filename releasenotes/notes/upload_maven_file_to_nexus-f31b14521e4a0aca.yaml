@@ -10,4 +10,3 @@ deprecations:
   - |
     shell/deploy script's upload_maven_file_to_nexus
     function is now deprecated and will be removed in a future release.
-

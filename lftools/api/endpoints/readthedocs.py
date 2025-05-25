@@ -87,7 +87,9 @@ class ReadTheDocs(client.RestApi):
 
         if more_results:
             while more_results is not None:
-                get_more_results = self.get("projects/{}/versions/".format(project) + more_results)[1]
+                get_more_results = self.get(
+                    "projects/{}/versions/".format(project) + more_results
+                )[1]
                 more_results = get_more_results["next"]
 
                 for version in get_more_results["results"]:
@@ -119,7 +121,9 @@ class ReadTheDocs(client.RestApi):
         data = {"active": active}
 
         json_data = json.dumps(data)
-        result = self.patch("projects/{}/versions/{}/".format(project, version), data=json_data)
+        result = self.patch(
+            "projects/{}/versions/{}/".format(project, version), data=json_data
+        )
         return result
 
     def project_update(self, project, *args):
@@ -138,7 +142,16 @@ class ReadTheDocs(client.RestApi):
         else:
             return False, result.status_code
 
-    def project_create(self, name, repository_url, repository_type, homepage, programming_language, language, **kwargs):
+    def project_create(
+        self,
+        name,
+        repository_url,
+        repository_type,
+        homepage,
+        programming_language,
+        language,
+        **kwargs,
+    ):
         """Create a new Read the Docs project.
 
         :param name: Project name. Any spaces will convert to dashes for the
@@ -176,7 +189,9 @@ class ReadTheDocs(client.RestApi):
         :param kwargs:
         :return: {result}
         """
-        result = self.get("projects/{}/builds/?running=True".format(project), **kwargs)[1]
+        result = self.get("projects/{}/builds/?running=True".format(project), **kwargs)[
+            1
+        ]
 
         if result["count"] > 0:
             return json.dumps(result, indent=2)
@@ -202,7 +217,9 @@ class ReadTheDocs(client.RestApi):
                         (must be an active version)
         :return: {result}
         """
-        result = self.post("projects/{}/versions/{}/builds/".format(project, version))[1]
+        result = self.post("projects/{}/versions/{}/builds/".format(project, version))[
+            1
+        ]
         return json.dumps(result, indent=2)
 
     def subproject_list(self, project):

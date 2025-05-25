@@ -32,7 +32,9 @@ def token(ctx):
 
 
 @click.command()
-@click.option("--name", type=str, default="token-created-by-lftools", help="set token name")
+@click.option(
+    "--name", type=str, default="token-created-by-lftools", help="set token name"
+)
 @click.pass_context
 def change(ctx, name):
     """Generate a new API token."""
@@ -44,7 +46,9 @@ def change(ctx, name):
         log.error("Username or password not set.")
         sys.exit(1)
 
-    log.info(get_token(name, jenkins.url, change=True, username=username, password=password))
+    log.info(
+        get_token(name, jenkins.url, change=True, username=username, password=password)
+    )
 
 
 @click.command()
@@ -172,5 +176,8 @@ token.add_command(reset)
 
 def _require_jjb_ini(config):
     if not os.path.isfile(config):
-        log.error("jenkins_jobs.ini not found in any of the search paths. " "Please provide one before proceeding.")
+        log.error(
+            "jenkins_jobs.ini not found in any of the search paths. "
+            "Please provide one before proceeding."
+        )
         sys.exit(1)

@@ -51,7 +51,9 @@ class Gerrit:
         short_endpoint = self.params["creds"]["endpoint"].split("://")[-1]
         project_endpoint = urllib.parse.urljoin(short_endpoint, self.project)
         remote = "https://{}:{}@{}".format(
-            self.params["creds"]["username"], self.params["creds"]["password"], project_endpoint
+            self.params["creds"]["username"],
+            self.params["creds"]["password"],
+            project_endpoint,
         )
         Repo.clone_from(remote, working_dir)
         self.repo = Repo.init(working_dir)
@@ -138,7 +140,9 @@ class Gerrit:
         commit_msg += "Signed-off-by: {}".format(sob)
         self.repo.git.commit("-m{}".format(commit_msg))
         if push:
-            self.repo.git.push(self.origin, "HEAD:refs/for/{}".format(self.default_branch))
+            self.repo.git.push(
+                self.origin, "HEAD:refs/for/{}".format(self.default_branch)
+            )
 
     def add_info_job(self, fqdn, gerrit_project, issue_id, agent):
         """Add info-verify jenkins job for the new project.
@@ -161,7 +165,9 @@ class Gerrit:
                 buildnode = "centos7-builder-2c-1g"
 
         jinja_env = Environment(
-            loader=PackageLoader("lftools.git"), autoescape=select_autoescape(), keep_trailing_newline=True
+            loader=PackageLoader("lftools.git"),
+            autoescape=select_autoescape(),
+            keep_trailing_newline=True,
         )
         template = jinja_env.get_template("project.yaml")
         content = template.render(
@@ -189,17 +195,23 @@ class Gerrit:
         filename = ".gitreview"
 
         jinja_env = Environment(
-            loader=PackageLoader("lftools.git"), autoescape=select_autoescape(), keep_trailing_newline=True
+            loader=PackageLoader("lftools.git"),
+            autoescape=select_autoescape(),
+            keep_trailing_newline=True,
         )
         template = jinja_env.get_template("gitreview")
-        content = template.render(fqdn=fqdn, project_name=gerrit_project, default_branch=self.default_branch)
+        content = template.render(
+            fqdn=fqdn, project_name=gerrit_project, default_branch=self.default_branch
+        )
         log.debug(".gitreview contents:\n{}".format(content))
 
         self.add_file(filename, content)
         commit_msg = "Chore: Automation adds {}".format(filename)
         self.commit(commit_msg, issue_id, push=True)
 
-    def add_maven_config(self, fqdn, gerrit_project, issue_id, nexus3_url="", nexus3_ports=""):
+    def add_maven_config(
+        self, fqdn, gerrit_project, issue_id, nexus3_url="", nexus3_ports=""
+    ):
         """Add the four required JCasC files to create settings for a new project."""
         project_dashed = gerrit_project.replace("/", "-")
         params_path = "config-params.yaml"
@@ -244,7 +256,9 @@ class Gerrit:
                 log.error("Invalid nexus3_ports designated.")
 
         jinja_env = Environment(
-            loader=PackageLoader("lftools.git"), autoescape=select_autoescape(), keep_trailing_newline=True
+            loader=PackageLoader("lftools.git"),
+            autoescape=select_autoescape(),
+            keep_trailing_newline=True,
         )
         template = jinja_env.get_template(params_path)
         config_params_content = template.render(project_dashed=project_dashed)
@@ -260,14 +274,19 @@ class Gerrit:
         )
         log.debug("config-params.yaml contents:\n{}".format(server_creds_content))
 
-        config_path = "jenkins-config/managed-config-files/mavenSettings/{}-settings".format(project_dashed)
+        config_path = (
+            "jenkins-config/managed-config-files/mavenSettings/{}-settings".format(
+                project_dashed
+            )
+        )
         try:
             os.makedirs(config_path)
         except FileExistsError:
             pass
 
         self.add_symlink(
-            os.path.join(config_path, content_path), "../../../managed-config-templates/mavenSettings-content"
+            os.path.join(config_path, content_path),
+            "../../../managed-config-templates/mavenSettings-content",
         )
         self.add_symlink(
             os.path.join(config_path, sb_creds_path),

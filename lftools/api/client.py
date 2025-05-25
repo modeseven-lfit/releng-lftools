@@ -8,6 +8,7 @@
 # http://www.eclipse.org/legal/epl-v10.html
 ##############################################################################
 """REST API interface using Requests."""
+
 from __future__ import annotations
 
 import json
@@ -36,7 +37,12 @@ class RestApi(object):
             self.password: str = self.creds["password"]
             self.r: requests.Session = requests.Session()
             self.r.auth = (self.username, self.password)
-            self.r.headers.update({"Content-Type": "application/json; charset=UTF-8", "Accept": "application/json"})
+            self.r.headers.update(
+                {
+                    "Content-Type": "application/json; charset=UTF-8",
+                    "Accept": "application/json",
+                }
+            )
 
         if self.creds["authtype"] == "token":
             self.token: str = self.creds["token"]
@@ -48,7 +54,9 @@ class RestApi(object):
         self, url: str, method: str, data: Optional[Any] = None, timeout: int = 30
     ) -> requests.Response | Tuple[requests.Response, Optional[Dict[str, Any] | str]]:
         """Execute the request."""
-        resp: requests.Response = self.r.request(method, self.endpoint + url, data=data, timeout=timeout)
+        resp: requests.Response = self.r.request(
+            method, self.endpoint + url, data=data, timeout=timeout
+        )
 
         # Some massaging to make our gerrit python code work
         if resp.status_code == 409:
@@ -69,19 +77,27 @@ class RestApi(object):
 
         return resp, body
 
-    def get(self, url: str, **kwargs) -> requests.Response | Tuple[requests.Response, Optional[Dict[str, Any] | str]]:
+    def get(
+        self, url: str, **kwargs
+    ) -> requests.Response | Tuple[requests.Response, Optional[Dict[str, Any] | str]]:
         """HTTP GET request."""
         return self._request(url, "GET", **kwargs)
 
-    def patch(self, url: str, **kwargs) -> requests.Response | Tuple[requests.Response, Optional[Dict[str, Any] | str]]:
+    def patch(
+        self, url: str, **kwargs
+    ) -> requests.Response | Tuple[requests.Response, Optional[Dict[str, Any] | str]]:
         """HTTP PATCH request."""
         return self._request(url, "PATCH", **kwargs)
 
-    def post(self, url: str, **kwargs) -> requests.Response | Tuple[requests.Response, Optional[Dict[str, Any] | str]]:
+    def post(
+        self, url: str, **kwargs
+    ) -> requests.Response | Tuple[requests.Response, Optional[Dict[str, Any] | str]]:
         """HTTP POST request."""
         return self._request(url, "POST", **kwargs)
 
-    def put(self, url: str, **kwargs) -> requests.Response | Tuple[requests.Response, Optional[Dict[str, Any] | str]]:
+    def put(
+        self, url: str, **kwargs
+    ) -> requests.Response | Tuple[requests.Response, Optional[Dict[str, Any] | str]]:
         """HTTP PUT request."""
         return self._request(url, "PUT", **kwargs)
 

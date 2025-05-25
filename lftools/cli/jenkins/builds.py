@@ -42,7 +42,7 @@ def queued(ctx):
     queue_length = len(queue)
     print("Build Queue (%s)" % queue_length)
     for build in queue:
-        print(" - %s" % (build["task"]["name"])),
+        (print(" - %s" % (build["task"]["name"])),)
         if build["stuck"]:
             print("[Stuck]")
         if build["blocked"]:

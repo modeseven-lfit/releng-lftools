@@ -9,6 +9,7 @@
 # http://www.eclipse.org/legal/epl-v10.html
 ##############################################################################
 """Scans code for a valid license header."""
+
 from __future__ import annotations
 
 __author__ = "Thanh Ha"
@@ -39,7 +40,9 @@ def get_header_text(_file: str) -> str:
             if not result:
                 break
             string: str = re.sub(r"^\s*#+", "", line).strip()
-            if bool(re.match("Copyright", string, re.I)) or bool(  # Ignore the Copyright line
+            if bool(
+                re.match("Copyright", string, re.I)
+            ) or bool(  # Ignore the Copyright line
                 re.match("^#!", line, re.I)
             ):  # Ignore #! shebang lines
                 continue
@@ -65,7 +68,9 @@ def check_license(license_file: str, code_file: str) -> int:
     return 0
 
 
-def check_license_directory(license_file: str, directory: str, regex: str = r".+\.py$") -> None:
+def check_license_directory(
+    license_file: str, directory: str, regex: str = r".+\.py$"
+) -> None:
     """Search a directory for files and calls check_license()."""
     missing_license: bool = False
 

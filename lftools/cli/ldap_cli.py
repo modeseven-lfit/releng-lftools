@@ -53,8 +53,18 @@ def inactivecommitters(ctx, gerrit_url, group):
 @click.argument("gerrit_clone_base")
 @click.argument("ldap_group")
 @click.argument("repo")
-@click.option("--purpose", envvar="purpose", type=str, help="Must be one of READY_FOR_INFO LINT IN-REVIEW")
-@click.option("--review", type=str, required=False, help="review number in gerrit, required if purpose is IN-REVIEW")
+@click.option(
+    "--purpose",
+    envvar="purpose",
+    type=str,
+    help="Must be one of READY_FOR_INFO LINT IN-REVIEW",
+)
+@click.option(
+    "--review",
+    type=str,
+    required=False,
+    help="review number in gerrit, required if purpose is IN-REVIEW",
+)
 @click.pass_context
 def autocorrectinfofile(ctx, gerrit_clone_base, ldap_group, repo, purpose, review):
     """Verify INFO.yaml against LDAP group.\n
@@ -80,7 +90,11 @@ def autocorrectinfofile(ctx, gerrit_clone_base, ldap_group, repo, purpose, revie
     required=True,
 )
 @click.option(
-    "--ldap-user-base", default="ou=Users,dc=freestandards,dc=org", envvar="LDAP_USER_BASE_DN", type=str, required=True
+    "--ldap-user-base",
+    default="ou=Users,dc=freestandards,dc=org",
+    envvar="LDAP_USER_BASE_DN",
+    type=str,
+    required=True,
 )
 @click.option(
     "--ldap-group-base",
@@ -119,7 +133,9 @@ def csv(ctx, ldap_server, ldap_group_base, ldap_user_base, groups):
     def ldap_query(ldap_object, dn, search_filter, attrs):
         """Perform an LDAP query and return the results."""
         try:
-            ldap_result_id = ldap_object.search(dn, ldap.SCOPE_SUBTREE, search_filter, attrs)
+            ldap_result_id = ldap_object.search(
+                dn, ldap.SCOPE_SUBTREE, search_filter, attrs
+            )
             result_set = []
             while 1:
                 result_type, result_data = ldap_object.result(ldap_result_id, 0)
@@ -155,7 +171,11 @@ def csv(ctx, ldap_server, ldap_group_base, ldap_user_base, groups):
         """Covert LDIF user info to CSV of uid,mail,cn."""
         attrs = user[0][0][1]
         return ",".join(
-            [attrs["uid"][0].decode("utf-8"), attrs["cn"][0].decode("utf-8"), attrs["mail"][0].decode("utf-8")]
+            [
+                attrs["uid"][0].decode("utf-8"),
+                attrs["cn"][0].decode("utf-8"),
+                attrs["mail"][0].decode("utf-8"),
+            ]
         )
 
     def main(groups):
@@ -170,7 +190,9 @@ def csv(ctx, ldap_server, ldap_group_base, ldap_user_base, groups):
                 group_name = group_bar["name"][3:-cut_length]
                 for user in group_bar["members"]:
                     user = user.decode("utf-8")
-                    user_info = ldap_query(ldap_obj, ldap_user_base, user, ["uid", "cn", "mail"])
+                    user_info = ldap_query(
+                        ldap_obj, ldap_user_base, user, ["uid", "cn", "mail"]
+                    )
                     try:
                         print("%s,%s" % (group_name, user_to_csv(user_info)))
                     except Exception:

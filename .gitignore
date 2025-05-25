@@ -22,6 +22,7 @@ _cacache/
 anonymous-cli-metrics.json
 
 # Python
+.mypy_cache/
 .cache/
 .eggs/
 .pytest_cache/

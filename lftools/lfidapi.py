@@ -30,7 +30,9 @@ def check_response_code(response):
     """Response Code Helper function."""
     if response.status_code != 200:
         raise requests.HTTPError(
-            "Authorization failed with the following " "error:\n{}: {}".format(response.status_code, response.text)
+            "Authorization failed with the following error:\n{}: {}".format(
+                response.status_code, response.text
+            )
         )
 
 
@@ -48,7 +50,9 @@ def helper_search_members(group):
     """List members of a group."""
     response_code = helper_check_group_exists(group)
     if response_code != 200:
-        log.error("Code: {} Group {} does not exists exiting...".format(response_code, group))
+        log.error(
+            "Code: {} Group {} does not exists exiting...".format(response_code, group)
+        )
         sys.exit(1)
     else:
         access_token, url = oauth_helper()
@@ -186,26 +190,40 @@ def helper_match_ldap_to_info(info_file, group, githuborg, noop):
         log.info(x)
 
     for user in all_users:
-        removed_by_patch = [item for item in ldap_committers if item not in info_committers]
+        removed_by_patch = [
+            item for item in ldap_committers if item not in info_committers
+        ]
         if user in removed_by_patch:
             log.info("%s found in group %s " % (user, group))
             if noop is False:
                 log.info("Removing user %s from group %s" % (user, group))
                 if githuborg:
                     helper_user_github(
-                        ctx=False, organization=githuborg, user=user, team=group, delete=True, admin=False
+                        ctx=False,
+                        organization=githuborg,
+                        user=user,
+                        team=group,
+                        delete=True,
+                        admin=False,
                     )
                 else:
                     helper_user(user, group, "--delete")
 
-        added_by_patch = [item for item in info_committers if item not in ldap_committers]
+        added_by_patch = [
+            item for item in info_committers if item not in ldap_committers
+        ]
         if user in added_by_patch:
             log.info("%s not found in group %s" % (user, group))
             if noop is False:
                 log.info("Adding user %s to group %s" % (user, group))
                 if githuborg:
                     helper_user_github(
-                        ctx=False, organization=githuborg, user=user, team=group, delete=False, admin=False
+                        ctx=False,
+                        organization=githuborg,
+                        user=user,
+                        team=group,
+                        delete=False,
+                        admin=False,
                     )
 
                 else:

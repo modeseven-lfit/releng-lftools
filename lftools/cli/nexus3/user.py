@@ -60,7 +60,9 @@ def search_user(ctx, username):
 def user_create(ctx, username, first_name, last_name, email_address, roles, password):
     """Create a new user account."""
     r = ctx.obj["nexus3"]
-    data = r.create_user(username, first_name, last_name, email_address, roles, password)
+    data = r.create_user(
+        username, first_name, last_name, email_address, roles, password
+    )
     log.info(data)
 
 

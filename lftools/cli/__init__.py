@@ -9,7 +9,6 @@
 ##############################################################################
 """CLI main for lftools."""
 
-
 import configparser
 import getpass
 import logging

@@ -28,7 +28,12 @@ def license(ctx):
 
 @click.command()
 @click.argument("source")
-@click.option("-l", "--license", default="license-header.txt", help="License header file to compare against.")
+@click.option(
+    "-l",
+    "--license",
+    default="license-header.txt",
+    help="License header file to compare against.",
+)
 @click.pass_context
 def check(ctx, license, source):
     """Check files for missing license headers.
@@ -44,8 +49,18 @@ def check(ctx, license, source):
 
 @click.command(name="check-dir")
 @click.argument("directory")
-@click.option("-l", "--license", default="license-header.txt", help="License header file to compare against.")
-@click.option("-r", "--regex", default=r".+\.py$", help="File regex pattern to match on when searching.")
+@click.option(
+    "-l",
+    "--license",
+    default="license-header.txt",
+    help="License header file to compare against.",
+)
+@click.option(
+    "-r",
+    "--regex",
+    default=r".+\.py$",
+    help="File regex pattern to match on when searching.",
+)
 @click.pass_context
 def check_directory(ctx, license, directory, regex):
     """Check directory for files missing license headers.

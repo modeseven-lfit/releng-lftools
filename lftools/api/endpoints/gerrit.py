@@ -44,7 +44,9 @@ class Gerrit(client.RestApi):
 
         super(Gerrit, self).__init__(**params)
 
-    def add_file(self, fqdn, gerrit_project, filename, issue_id, file_location, **kwargs):
+    def add_file(
+        self, fqdn, gerrit_project, filename, issue_id, file_location, **kwargs
+    ):
         """Add a file for review to a Project.
 
         File can be sourced from any location
@@ -62,7 +64,9 @@ class Gerrit(client.RestApi):
         payload = self.create_change(basename, gerrit_project, issue_id, signed_off_by)
 
         if file_location:
-            file_location = urllib.parse.quote(file_location, safe="", encoding=None, errors=None)
+            file_location = urllib.parse.quote(
+                file_location, safe="", encoding=None, errors=None
+            )
             basename = file_location
         log.info(payload)
 
@@ -73,7 +77,10 @@ class Gerrit(client.RestApi):
 
         my_file = open(filename)
         my_file_size = os.stat(filename)
-        headers = {"Content-Type": "text/plain", "Content-length": "{}".format(my_file_size)}
+        headers = {
+            "Content-Type": "text/plain",
+            "Content-length": "{}".format(my_file_size),
+        }
         self.r.headers.update(headers)
         access_str = "changes/{}/edit/{}".format(changeid, basename)
         payload = my_file
@@ -146,9 +153,14 @@ class Gerrit(client.RestApi):
             gerrit_project_dashed, gerrit_project, buildnode
         )
         my_inline_file_size = len(my_inline_file.encode("utf-8"))
-        headers = {"Content-Type": "text/plain", "Content-length": "{}".format(my_inline_file_size)}
+        headers = {
+            "Content-Type": "text/plain",
+            "Content-length": "{}".format(my_inline_file_size),
+        }
         self.r.headers.update(headers)
-        access_str = "changes/{0}/edit/jjb%2F{1}%2F{1}.yaml".format(changeid, gerrit_project_dashed)
+        access_str = "changes/{0}/edit/jjb%2F{1}%2F{1}.yaml".format(
+            changeid, gerrit_project_dashed
+        )
         payload = my_inline_file
         log.info(access_str)
         result = self.put(access_str, data=payload)
@@ -208,7 +220,9 @@ class Gerrit(client.RestApi):
 
     def abandon_changes(self, fqdn, gerrit_project, **kwargs):
         """."""
-        gerrit_project_encoded = urllib.parse.quote(gerrit_project, safe="", encoding=None, errors=None)
+        gerrit_project_encoded = urllib.parse.quote(
+            gerrit_project, safe="", encoding=None, errors=None
+        )
         access_str = "changes/?q=project:{}".format(gerrit_project_encoded)
         log.info(access_str)
         headers = {"Content-Type": "application/json; charset=UTF-8"}
@@ -223,14 +237,20 @@ class Gerrit(client.RestApi):
                 result = self.post(access_str, data=payload)[1]
                 return result
 
-    def create_change(self, filename, gerrit_project, issue_id, signed_off_by, **kwargs):
+    def create_change(
+        self, filename, gerrit_project, issue_id, signed_off_by, **kwargs
+    ):
         """Method to create a gerrit change."""
         if issue_id:
-            subject = "Automation adds {0}\n\nIssue-ID: {1}\n\nSigned-off-by: {2}".format(
-                filename, issue_id, signed_off_by
+            subject = (
+                "Automation adds {0}\n\nIssue-ID: {1}\n\nSigned-off-by: {2}".format(
+                    filename, issue_id, signed_off_by
+                )
             )
         else:
-            subject = "Automation adds {0}\n\nSigned-off-by: {1}".format(filename, signed_off_by)
+            subject = "Automation adds {0}\n\nSigned-off-by: {1}".format(
+                filename, signed_off_by
+            )
         payload = json.dumps(
             {
                 "project": "{}".format(gerrit_project),
@@ -243,7 +263,9 @@ class Gerrit(client.RestApi):
     def sanity_check(self, fqdn, gerrit_project, **kwargs):
         """Perform a sanity check."""
         # Sanity check
-        gerrit_project_encoded = urllib.parse.quote(gerrit_project, safe="", encoding=None, errors=None)
+        gerrit_project_encoded = urllib.parse.quote(
+            gerrit_project, safe="", encoding=None, errors=None
+        )
         mylist = ["projects/", "projects/{}".format(gerrit_project_encoded)]
         for access_str in mylist:
             log.info(access_str)
@@ -286,11 +308,12 @@ class Gerrit(client.RestApi):
         port=29418
         project={1}
         defaultbranch=master
-        """.format(
-            fqdn, gerrit_project
-        )
+        """.format(fqdn, gerrit_project)
         my_inline_file_size = len(my_inline_file.encode("utf-8"))
-        headers = {"Content-Type": "text/plain", "Content-length": "{}".format(my_inline_file_size)}
+        headers = {
+            "Content-Type": "text/plain",
+            "Content-length": "{}".format(my_inline_file_size),
+        }
         self.r.headers.update(headers)
         access_str = "changes/{}/edit/{}".format(changeid, filename)
         payload = my_inline_file
@@ -325,7 +348,9 @@ class Gerrit(client.RestApi):
         ###############################################################
         payload = json.dumps({"visible_to_all": "false"})
         saml_group = "saml/{}".format(ldap_group)
-        saml_group_encoded = urllib.parse.quote(saml_group, safe="", encoding=None, errors=None)
+        saml_group_encoded = urllib.parse.quote(
+            saml_group, safe="", encoding=None, errors=None
+        )
         access_str = "groups/{}".format(saml_group_encoded)
         log.info("Encoded SAML group name: {}".format(saml_group_encoded))
         result = self.put(access_str, data=payload)
@@ -336,7 +361,9 @@ class Gerrit(client.RestApi):
         ###############################################################
         # Github Rights
 
-        gerrit_project_encoded = urllib.parse.quote(gerrit_project, safe="", encoding=None, errors=None)
+        gerrit_project_encoded = urllib.parse.quote(
+            gerrit_project, safe="", encoding=None, errors=None
+        )
         # GET /groups/?m=test%2F HTTP/1.0
         access_str = "groups/?m=GitHub%20Replication"
         log.info(access_str)
@@ -352,7 +379,13 @@ class Gerrit(client.RestApi):
                     "add": {
                         "refs/*": {
                             "permissions": {
-                                "read": {"rules": {"{}".format(githubid): {"action": "{}".format("ALLOW")}}}
+                                "read": {
+                                    "rules": {
+                                        "{}".format(githubid): {
+                                            "action": "{}".format("ALLOW")
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -379,7 +412,9 @@ class Gerrit(client.RestApi):
         --description="This is a demo project"
 
         """
-        gerrit_project = urllib.parse.quote(gerrit_project, safe="", encoding=None, errors=None)
+        gerrit_project = urllib.parse.quote(
+            gerrit_project, safe="", encoding=None, errors=None
+        )
 
         access_str = "projects/?query=name:{}".format(gerrit_project)
         result = self.get(access_str)[0]
@@ -422,12 +457,18 @@ class Gerrit(client.RestApi):
         group_list = []
         for k, v in result.items():
             for kk, vv in result[k]["permissions"]["owner"]["rules"].items():
-                group_list.append(kk.replace("ldap:cn=", "").replace(",ou=Groups,dc=freestandards,dc=org", ""))
+                group_list.append(
+                    kk.replace("ldap:cn=", "").replace(
+                        ",ou=Groups,dc=freestandards,dc=org", ""
+                    )
+                )
         return group_list
 
     def list_project_inherits_from(self, gerrit_project):
         """List who a project inherits from."""
-        gerrit_project = urllib.parse.quote(gerrit_project, safe="", encoding=None, errors=None)
+        gerrit_project = urllib.parse.quote(
+            gerrit_project, safe="", encoding=None, errors=None
+        )
         result = self.get("projects/{}/access".format(gerrit_project))[1]
         inherits = result["inherits_from"]["id"]
         return inherits

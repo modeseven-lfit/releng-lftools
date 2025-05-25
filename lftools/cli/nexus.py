@@ -8,6 +8,7 @@
 # http://www.eclipse.org/legal/epl-v10.html
 ##############################################################################
 """CLI entry point for nexus commands."""
+
 from os import environ
 
 import click
@@ -59,7 +60,11 @@ def create(ctx):
     help="Repo config file for how the Nexus repository should be created.",
 )
 @click.option(
-    "-s", "--settings", type=str, required=False, help="Optional config file containing administrative settings."
+    "-s",
+    "--settings",
+    type=str,
+    required=False,
+    help="Optional config file containing administrative settings.",
 )
 @click.option(
     "-u",
@@ -79,9 +84,19 @@ def repo(ctx, configfile, url, settings=False):
 
 @create.command()
 @click.option(
-    "-c", "--config", type=str, required=True, help="Role config file for how the Nexus role should be created."
+    "-c",
+    "--config",
+    type=str,
+    required=True,
+    help="Role config file for how the Nexus role should be created.",
 )
-@click.option("-s", "--settings", type=str, required=True, help="Config file containing administrative settings.")
+@click.option(
+    "-s",
+    "--settings",
+    type=str,
+    required=True,
+    help="Config file containing administrative settings.",
+)
 @click.pass_context
 def role(ctx, config, settings):
     """Create a Nexus role as defined by a role-config.yaml file."""
@@ -98,7 +113,11 @@ def docker(ctx):
 def docker_params(command):
     """Common options and arguments for all docker subcommands."""
     command = click.option(
-        "--settings", type=str, help=('Yaml file containing "nexus" (url), "user", and "password" ' "definitions.")
+        "--settings",
+        type=str,
+        help=(
+            'Yaml file containing "nexus" (url), "user", and "password" definitions.'
+        ),
     )(command)
     command = click.option(
         "-s",
@@ -117,7 +136,9 @@ def docker_params(command):
 @docker.command(name="list")
 @docker_params
 @click.option(
-    "--csv", type=click.Path(dir_okay=False, writable=True), help="Write a csv file of the search results to PATH."
+    "--csv",
+    type=click.Path(dir_okay=False, writable=True),
+    help="Write a csv file of the search results to PATH.",
 )
 @click.pass_context
 def list_images(ctx, settings, server, repo, pattern, csv):
@@ -144,7 +165,9 @@ def delete_images(ctx, settings, server, repo, pattern, yes):
     to delete images NOT matching the string.
     """
     images = nexuscmd.search(settings, server, repo, pattern)
-    if yes or click.confirm("Would you like to delete all {} images?".format(str(len(images)))):
+    if yes or click.confirm(
+        "Would you like to delete all {} images?".format(str(len(images)))
+    ):
         nexuscmd.delete_images(settings, server, images)
 
 
@@ -169,14 +192,17 @@ def release(ctx, repos, verify, server):
 
 
 @docker.command(name="releasedockerhub")
-@click.option("-o", "--org", type=str, required=True, help="Specify repository organization.")
+@click.option(
+    "-o", "--org", type=str, required=True, help="Specify repository organization."
+)
 @click.option(
     "-r",
     "--repo",
     type=str,
     default="",
     required=False,
-    help="Only repos containing this string will be selected. " "Default set to blank string, which is every repo.",
+    help="Only repos containing this string will be selected. "
+    "Default set to blank string, which is every repo.",
 )
 @click.option(
     "-e",
@@ -184,10 +210,22 @@ def release(ctx, repos, verify, server):
     is_flag=True,
     required=False,
     default=False,
-    help="Match the exact repo name. " "If used, --repo parameter can not be empty.",
+    help="Match the exact repo name. If used, --repo parameter can not be empty.",
 )
-@click.option("-s", "--summary", is_flag=True, required=False, help="Prints a summary of missing docker tags.")
-@click.option("-v", "--verbose", is_flag=True, required=False, help="Prints all collected repo/tag information.")
+@click.option(
+    "-s",
+    "--summary",
+    is_flag=True,
+    required=False,
+    help="Prints a summary of missing docker tags.",
+)
+@click.option(
+    "-v",
+    "--verbose",
+    is_flag=True,
+    required=False,
+    help="Prints all collected repo/tag information.",
+)
 @click.option(
     "-c",
     "--copy",
@@ -227,10 +265,14 @@ def release(ctx, repos, verify, server):
     r" ^\d+.\d+.\d+$                                                 ",
 )
 @click.pass_context
-def copy_from_nexus3_to_dockerhub(ctx, org, repo, exact, summary, verbose, copy, progbar, repofile, version_regexp):
+def copy_from_nexus3_to_dockerhub(
+    ctx, org, repo, exact, summary, verbose, copy, progbar, repofile, version_regexp
+):
     """Find missing repos in Docker Hub, Copy from Nexus3.
 
     Will by default list all missing repos in Docker Hub, compared to Nexus3.
     If -c (--copy) is provided, it will copy the repos from Nexus3 to Docker Hub.
     """
-    rdh.start_point(org, repo, exact, summary, verbose, copy, progbar, repofile, version_regexp)
+    rdh.start_point(
+        org, repo, exact, summary, verbose, copy, progbar, repofile, version_regexp
+    )

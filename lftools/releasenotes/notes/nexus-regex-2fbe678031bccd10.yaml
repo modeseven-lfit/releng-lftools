@@ -8,4 +8,3 @@ fixes:
     when creating a new nexus2 Repository target.
 
     This is enabled by setting strict_url_regex=False in config file.
-

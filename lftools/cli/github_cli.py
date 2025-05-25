@@ -75,10 +75,20 @@ def votes(ctx, organization, repo, pr):
 @click.argument("organization")
 @click.option("--audit", is_flag=True, required=False, help="List members without 2fa")
 @click.option("--repos", is_flag=True, required=False, help="List all repos")
-@click.option("--full", is_flag=True, required=False, help="All members and their respective teams")
+@click.option(
+    "--full",
+    is_flag=True,
+    required=False,
+    help="All members and their respective teams",
+)
 @click.option("--teams", is_flag=True, required=False, help="List avaliable teams")
 @click.option("--team", type=str, required=False, help="List members of a team")
-@click.option("--repofeatures", is_flag=True, required=False, help="List enabled features for repos in an org")
+@click.option(
+    "--repofeatures",
+    is_flag=True,
+    required=False,
+    help="List enabled features for repos in an org",
+)
 @click.pass_context
 def list(ctx, organization, repos, audit, full, teams, team, repofeatures):
     """List options for github org repos."""
@@ -89,11 +99,17 @@ def list(ctx, organization, repos, audit, full, teams, team, repofeatures):
 @click.argument("organization")
 @click.argument("repository")
 @click.argument("description")
-@click.option("--has_issues", is_flag=True, required=False, help="Repo should have issues")
-@click.option("--has_projects", is_flag=True, required=False, help="Repo should have projects")
+@click.option(
+    "--has_issues", is_flag=True, required=False, help="Repo should have issues"
+)
+@click.option(
+    "--has_projects", is_flag=True, required=False, help="Repo should have projects"
+)
 @click.option("--has_wiki", is_flag=True, required=False, help="Repo should have wiki")
 @click.pass_context
-def createrepo(ctx, organization, repository, description, has_issues, has_projects, has_wiki):
+def createrepo(
+    ctx, organization, repository, description, has_issues, has_projects, has_wiki
+):
     """Create a Github repo within an Organization.
 
     By default has_issues has_wiki and has_projects is set to false.
@@ -137,13 +153,26 @@ def createrepo(ctx, organization, repository, description, has_issues, has_proje
 @click.command(name="update-repo")
 @click.argument("organization")
 @click.argument("repository")
-@click.option("--has_issues", is_flag=True, required=False, help="Repo should have issues")
-@click.option("--has_projects", is_flag=True, required=False, help="Repo should have projects")
+@click.option(
+    "--has_issues", is_flag=True, required=False, help="Repo should have issues"
+)
+@click.option(
+    "--has_projects", is_flag=True, required=False, help="Repo should have projects"
+)
 @click.option("--has_wiki", is_flag=True, required=False, help="Repo should have wiki")
 @click.option("--add_team", type=str, required=False, help="Add team to repo")
 @click.option("--remove_team", type=str, required=False, help="remove team from repo")
 @click.pass_context
-def updaterepo(ctx, organization, repository, has_issues, has_projects, has_wiki, add_team, remove_team):
+def updaterepo(
+    ctx,
+    organization,
+    repository,
+    has_issues,
+    has_projects,
+    has_wiki,
+    add_team,
+    remove_team,
+):
     """Update a Github repo within an Organization.
 
     By default has_issues has_wiki and has_projects is set to false.
@@ -216,7 +245,11 @@ def createteam(ctx, organization, name, repo, privacy):
 
     g = Github(token)
     orgName = organization
-    log.info("Creating team {} for repo {} under organization {} ".format(name, repo, orgName))
+    log.info(
+        "Creating team {} for repo {} under organization {} ".format(
+            name, repo, orgName
+        )
+    )
     try:
         org = g.get_organization(orgName)
     except GithubException as ghe:
@@ -266,7 +299,12 @@ def createteam(ctx, organization, name, repo, privacy):
 @click.argument("user")
 @click.argument("team")
 @click.option("--delete", is_flag=True, required=False, help="Remove user from org")
-@click.option("--admin", is_flag=True, required=False, help="User is admin for org, or a maintaner of a team")
+@click.option(
+    "--admin",
+    is_flag=True,
+    required=False,
+    help="User is admin for org, or a maintaner of a team",
+)
 @click.pass_context
 def user(ctx, organization, user, team, delete, admin):
     """Add and Remove users from an org team."""

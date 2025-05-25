@@ -8,6 +8,7 @@
 # http://www.eclipse.org/legal/epl-v10.html
 ##############################################################################
 """Helper script to get access_token for lfid api."""
+
 from __future__ import annotations
 
 import logging

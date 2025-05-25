@@ -44,10 +44,14 @@ def repo_list(ctx):
 @click.argument("repo_policy")
 @click.option("-u", "--upstream-repo", "repo_upstream_url")
 @click.pass_context
-def create(ctx, repo_type, repo_id, repo_name, repo_provider, repo_policy, repo_upstream_url):
+def create(
+    ctx, repo_type, repo_id, repo_name, repo_provider, repo_policy, repo_upstream_url
+):
     """Create a new repository."""
     r = ctx.obj["nexus2"]
-    data = r.repo_create(repo_type, repo_id, repo_name, repo_provider, repo_policy, repo_upstream_url)
+    data = r.repo_create(
+        repo_type, repo_id, repo_name, repo_provider, repo_policy, repo_upstream_url
+    )
     log.info(data)
 
 

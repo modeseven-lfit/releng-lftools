@@ -96,7 +96,17 @@ def copy_archives(ctx, workspace, pattern):
 @click.argument("file")
 @click.option("-c", "--classifier", default="")
 @click.pass_context
-def file(ctx, nexus_url, nexus_repo_id, group_id, artifact_id, version, packaging, classifier, file):
+def file(
+    ctx,
+    nexus_url,
+    nexus_repo_id,
+    group_id,
+    artifact_id,
+    version,
+    packaging,
+    classifier,
+    file,
+):
     """Upload file to Nexus as a Maven artifact using cURL.
 
     This function will upload an artifact to Nexus while providing all of
@@ -105,7 +115,14 @@ def file(ctx, nexus_url, nexus_repo_id, group_id, artifact_id, version, packagin
     """
     try:
         deploy_sys.upload_maven_file_to_nexus(
-            nexus_url, nexus_repo_id, group_id, artifact_id, version, packaging, file, classifier
+            nexus_url,
+            nexus_repo_id,
+            group_id,
+            artifact_id,
+            version,
+            packaging,
+            file,
+            classifier,
         )
     except HTTPError as e:
         log.error(str(e))
@@ -158,9 +175,16 @@ def s3(ctx, s3_bucket, s3_path, build_url, workspace, pattern):
 @click.argument("file-name", envvar="FILE_NAME")
 # Maven Config
 @click.option("-b", "--maven-bin", envvar="MAVEN_BIN", help="Path of maven binary.")
-@click.option("-gs", "--global-settings", envvar="GLOBAL_SETTINGS_FILE", help="Global settings file.")
+@click.option(
+    "-gs",
+    "--global-settings",
+    envvar="GLOBAL_SETTINGS_FILE",
+    help="Global settings file.",
+)
 @click.option("-s", "--settings", envvar="SETTINGS_FILE", help="Settings file.")
-@click.option("-p", "--maven-params", help="Pass Maven commandline options to the mvn command.")
+@click.option(
+    "-p", "--maven-params", help="Pass Maven commandline options to the mvn command."
+)
 # Maven Artifact GAV
 @click.option("-a", "--artifact-id", help="Maven Artifact ID.")
 @click.option("-c", "--classifier", help="File classifier.")
@@ -234,7 +258,9 @@ def maven_file(
 @click.command()
 @click.argument("nexus-repo-url", envvar="NEXUS_REPO_URL")
 @click.argument("deploy-dir", envvar="DEPLOY_DIR")
-@click.option("-s", "--snapshot", is_flag=True, default=False, help="Deploy a snapshot repo.")
+@click.option(
+    "-s", "--snapshot", is_flag=True, default=False, help="Deploy a snapshot repo."
+)
 @click.pass_context
 def nexus(ctx, nexus_repo_url, deploy_dir, snapshot):
     """Deploy a Maven repository to a specified Nexus repository.
@@ -246,7 +272,11 @@ def nexus(ctx, nexus_repo_url, deploy_dir, snapshot):
 
         https://nexus.example.org/content/repositories/release
     """
-    log.debug("nexus_repo_url={}, deploy_dir={}, snapshot={}".format(nexus_repo_url, deploy_dir, snapshot))
+    log.debug(
+        "nexus_repo_url={}, deploy_dir={}, snapshot={}".format(
+            nexus_repo_url, deploy_dir, snapshot
+        )
+    )
     try:
         deploy_sys.deploy_nexus(nexus_repo_url, deploy_dir, snapshot)
     except IOError as e:

@@ -9,6 +9,7 @@
 # http://www.eclipse.org/legal/epl-v10.html
 ##############################################################################
 """Configuration subsystem for lftools."""
+
 from __future__ import annotations
 
 import logging

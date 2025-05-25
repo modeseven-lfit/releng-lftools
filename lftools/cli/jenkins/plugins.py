@@ -175,7 +175,11 @@ def sec(ctx):
                 for version in w["versions"]:
                     lastversion = version.get("lastVersion")
                 if name == key and secdict[key] == lastversion:
-                    print("{0}:{1}\t{0}:{2}\t{3}".format(key, secdict[key], activedict[key], url))
+                    print(
+                        "{0}:{1}\t{0}:{2}\t{3}".format(
+                            key, secdict[key], activedict[key], url
+                        )
+                    )
 
 
 plugins_init.add_command(list_plugins, name="list")

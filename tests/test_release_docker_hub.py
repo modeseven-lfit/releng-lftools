@@ -69,9 +69,7 @@ def test_nexus_tag_class(responses):
     repo = "sdc-helm-validator"
     repo_from_file = False
     url = "https://nexus3.onap.org:10002/v2/onap/sdc-helm-validator/tags/list"
-    answer = (
-        '{"name":"onap/sdc-helm-validator","tags":["latest","1.3.0","1.3.1","1.4.0","1.4.1","1.6.0","1.7.0","v1.0.0"]}'
-    )
+    answer = '{"name":"onap/sdc-helm-validator","tags":["latest","1.3.0","1.3.1","1.4.0","1.4.1","1.6.0","1.7.0","v1.0.0"]}'
     answer_valid_tags = ["1.3.0", "1.3.1", "1.4.0", "1.4.1", "1.6.0", "1.7.0"]
     answer_invalid_tags = ["latest", "v1.0.0"]
     responses.add(responses.GET, url, body=answer, status=200)
@@ -94,7 +92,11 @@ def test_docker_tag_class(responses, datafiles):
     repo = "sdc-helm-validator"
     repo_from_file = False
     url = "https://registry.hub.docker.com/v2/namespaces/onap/repositories/sdc-helm-validator/tags"
-    answer = data_from_file(os.path.join(str(datafiles), "releasedockerhub_dockertags-sdc-helm-validator.json"))
+    answer = data_from_file(
+        os.path.join(
+            str(datafiles), "releasedockerhub_dockertags-sdc-helm-validator.json"
+        )
+    )
     answer_valid_tags = ["1.3.0", "1.3.1", "1.4.0", "1.4.1", "1.6.0", "1.7.0"]
     answer_invalid_tags = ["latest", "v1.0.0"]
     responses.add(responses.GET, url, body=answer, status=200)
@@ -120,11 +122,31 @@ def test_multiple_pages_4_dockertags(responses, datafiles):
     url3 = "https://registry.hub.docker.com/v2/namespaces/onap/repositories/sdnc-aaf-image/tags?page=3"
     url4 = "https://registry.hub.docker.com/v2/namespaces/onap/repositories/sdnc-aaf-image/tags?page=4"
     url5 = "https://registry.hub.docker.com/v2/namespaces/onap/repositories/sdnc-aaf-image/tags?page=5"
-    answer1 = data_from_file(os.path.join(str(datafiles), "releasedockerhub_dockertags-sdnc-aaf-image-page1.json"))
-    answer2 = data_from_file(os.path.join(str(datafiles), "releasedockerhub_dockertags-sdnc-aaf-image-page2.json"))
-    answer3 = data_from_file(os.path.join(str(datafiles), "releasedockerhub_dockertags-sdnc-aaf-image-page3.json"))
-    answer4 = data_from_file(os.path.join(str(datafiles), "releasedockerhub_dockertags-sdnc-aaf-image-page4.json"))
-    answer5 = data_from_file(os.path.join(str(datafiles), "releasedockerhub_dockertags-sdnc-aaf-image-page5.json"))
+    answer1 = data_from_file(
+        os.path.join(
+            str(datafiles), "releasedockerhub_dockertags-sdnc-aaf-image-page1.json"
+        )
+    )
+    answer2 = data_from_file(
+        os.path.join(
+            str(datafiles), "releasedockerhub_dockertags-sdnc-aaf-image-page2.json"
+        )
+    )
+    answer3 = data_from_file(
+        os.path.join(
+            str(datafiles), "releasedockerhub_dockertags-sdnc-aaf-image-page3.json"
+        )
+    )
+    answer4 = data_from_file(
+        os.path.join(
+            str(datafiles), "releasedockerhub_dockertags-sdnc-aaf-image-page4.json"
+        )
+    )
+    answer5 = data_from_file(
+        os.path.join(
+            str(datafiles), "releasedockerhub_dockertags-sdnc-aaf-image-page5.json"
+        )
+    )
     answer_valid_tags = [
         "1.5.1",
         "1.5.2",
@@ -195,7 +217,11 @@ def test_docker_tag_err_429_class(responses, datafiles, mocker):
     repo = "sdc-helm-validator"
     repo_from_file = False
     url = "https://registry.hub.docker.com/v2/namespaces/onap/repositories/sdc-helm-validator/tags"
-    answer = data_from_file(os.path.join(str(datafiles), "releasedockerhub_dockertags-sdc-helm-validator.json"))
+    answer = data_from_file(
+        os.path.join(
+            str(datafiles), "releasedockerhub_dockertags-sdc-helm-validator.json"
+        )
+    )
     answer_valid_tags = ["1.3.0", "1.3.1", "1.4.0", "1.4.1", "1.6.0", "1.7.0"]
     answer_invalid_tags = ["latest", "v1.0.0"]
     answer_429 = '{"detail": "Rate limit exceeded", "error": false}"'
@@ -324,14 +350,18 @@ class TestTagsRegExpClass:
 
     def test_tag_class_manual_version_regexp_str_from_file_valid(self, datafiles):
         org = "onap"
-        test_regexp_from_file = os.path.join(str(datafiles), "releasedockerhub_good_regexp")
+        test_regexp_from_file = os.path.join(
+            str(datafiles), "releasedockerhub_good_regexp"
+        )
         rdh.initialize(org, test_regexp_from_file)
         assert rdh.validate_regexp()
         assert rdh.VERSION_REGEXP == r"^\d+.\d+"
 
     def test_tag_class_manual_version_regexp_str_from_file_invalid(self, datafiles):
         org = "onap"
-        test_regexp_from_file = os.path.join(str(datafiles), "releasedockerhub_bad_regexp")
+        test_regexp_from_file = os.path.join(
+            str(datafiles), "releasedockerhub_bad_regexp"
+        )
         rdh.initialize(org, test_regexp_from_file)
         assert not rdh.validate_regexp()
         assert rdh.VERSION_REGEXP == "["
@@ -349,7 +379,9 @@ class TestProjectClass:
     docker api.
     """
 
-    _test_image_long_id = "sha256:3450464d68c9443dedc8bfe3272a23e6441c37f707c42d32fee0ebdbcd319d2c"
+    _test_image_long_id = (
+        "sha256:3450464d68c9443dedc8bfe3272a23e6441c37f707c42d32fee0ebdbcd319d2c"
+    )
     _test_image_short_id = "sha256:3450464d68"
     _expected_nexus_image_str = [
         "nexus3.onap.org:10002/onap/sdc-helm-validator:1.4.0",
@@ -380,7 +412,9 @@ class TestProjectClass:
 
     nbr_exc = nbr_exceptions
 
-    def mocked_docker_pull(self, nexus_image_str, count, tag, retry_text="", progbar=False):
+    def mocked_docker_pull(
+        self, nexus_image_str, count, tag, retry_text="", progbar=False
+    ):
         """Mocking Pull an image from Nexus."""
         if nexus_image_str not in self._expected_nexus_image_str:
             raise ValueError("Wrong nexus project in pull")
@@ -421,11 +455,21 @@ class TestProjectClass:
 
     def test_ProjectClass_2_missing(self, responses, datafiles, mocker):
         """Test ProjectClass"""
-        mocker.patch("lftools.nexus.release_docker_hub.ProjectClass._docker_pull", side_effect=self.mocked_docker_pull)
-        mocker.patch("lftools.nexus.release_docker_hub.ProjectClass._docker_tag", side_effect=self.mocked_docker_tag)
-        mocker.patch("lftools.nexus.release_docker_hub.ProjectClass._docker_push", side_effect=self.mocked_docker_push)
         mocker.patch(
-            "lftools.nexus.release_docker_hub.ProjectClass._docker_cleanup", side_effect=self.mocked_docker_cleanup
+            "lftools.nexus.release_docker_hub.ProjectClass._docker_pull",
+            side_effect=self.mocked_docker_pull,
+        )
+        mocker.patch(
+            "lftools.nexus.release_docker_hub.ProjectClass._docker_tag",
+            side_effect=self.mocked_docker_tag,
+        )
+        mocker.patch(
+            "lftools.nexus.release_docker_hub.ProjectClass._docker_push",
+            side_effect=self.mocked_docker_push,
+        )
+        mocker.patch(
+            "lftools.nexus.release_docker_hub.ProjectClass._docker_cleanup",
+            side_effect=self.mocked_docker_cleanup,
         )
 
         project = ["onap", "sdc-helm-validator", ""]
@@ -436,13 +480,18 @@ class TestProjectClass:
         nexus_answer_invalid_tags = ["v1.0.0", "latest"]
         docker_url = "https://registry.hub.docker.com/v2/namespaces/onap/repositories/sdc-helm-validator/tags"
         docker_answer = data_from_file(
-            os.path.join(str(datafiles), "releasedockerhub_dockertags-sdc-helm-validator-missing2.json")
+            os.path.join(
+                str(datafiles),
+                "releasedockerhub_dockertags-sdc-helm-validator-missing2.json",
+            )
         )
         docker_answer_valid_tags = ["1.3.0", "1.3.1", "1.6.0", "1.7.0"]
         docker_answer_invalid_tags = ["latest", "v1.0.0"]
         docker_missing_tags = ["1.4.0", "1.4.1"]
 
-        self.counter.pull = self.counter.tag = self.counter.push = self.counter.cleanup = 0
+        self.counter.pull = self.counter.tag = self.counter.push = (
+            self.counter.cleanup
+        ) = 0
 
         responses.add(responses.GET, nexus_url, body=nexus_answer, status=200)
         responses.add(responses.GET, docker_url, body=docker_answer, status=200)
@@ -473,11 +522,21 @@ class TestProjectClass:
 
     def test_ProjectClass_1_missing(self, responses, datafiles, mocker):
         """Test ProjectClass"""
-        mocker.patch("lftools.nexus.release_docker_hub.ProjectClass._docker_pull", side_effect=self.mocked_docker_pull)
-        mocker.patch("lftools.nexus.release_docker_hub.ProjectClass._docker_tag", side_effect=self.mocked_docker_tag)
-        mocker.patch("lftools.nexus.release_docker_hub.ProjectClass._docker_push", side_effect=self.mocked_docker_push)
         mocker.patch(
-            "lftools.nexus.release_docker_hub.ProjectClass._docker_cleanup", side_effect=self.mocked_docker_cleanup
+            "lftools.nexus.release_docker_hub.ProjectClass._docker_pull",
+            side_effect=self.mocked_docker_pull,
+        )
+        mocker.patch(
+            "lftools.nexus.release_docker_hub.ProjectClass._docker_tag",
+            side_effect=self.mocked_docker_tag,
+        )
+        mocker.patch(
+            "lftools.nexus.release_docker_hub.ProjectClass._docker_push",
+            side_effect=self.mocked_docker_push,
+        )
+        mocker.patch(
+            "lftools.nexus.release_docker_hub.ProjectClass._docker_cleanup",
+            side_effect=self.mocked_docker_cleanup,
         )
 
         project = ["onap", "sdc-helm-validator", ""]
@@ -488,7 +547,10 @@ class TestProjectClass:
         nexus_answer_invalid_tags = ["v1.0.0", "latest"]
         docker_url = "https://registry.hub.docker.com/v2/namespaces/onap/repositories/sdc-helm-validator/tags"
         docker_answer = data_from_file(
-            os.path.join(str(datafiles), "releasedockerhub_dockertags-sdc-helm-validator-missing1.json")
+            os.path.join(
+                str(datafiles),
+                "releasedockerhub_dockertags-sdc-helm-validator-missing1.json",
+            )
         )
         docker_answer_valid_tags = ["1.3.0", "1.3.1", "1.4.1", "1.6.0", "1.7.0"]
         docker_answer_invalid_tags = ["latest", "v1.0.0"]
@@ -496,7 +558,9 @@ class TestProjectClass:
             "1.4.0",
         ]
 
-        self.counter.pull = self.counter.tag = self.counter.push = self.counter.cleanup = 0
+        self.counter.pull = self.counter.tag = self.counter.push = (
+            self.counter.cleanup
+        ) = 0
 
         responses.add(responses.GET, nexus_url, body=nexus_answer, status=200)
         responses.add(responses.GET, docker_url, body=docker_answer, status=200)
@@ -527,11 +591,21 @@ class TestProjectClass:
 
     def test_ProjectClass_socket_timeout(self, responses, datafiles, mocker):
         """Test ProjectClass"""
-        mocker.patch("lftools.nexus.release_docker_hub.ProjectClass._docker_pull", side_effect=self.mocked_docker_pull)
-        mocker.patch("lftools.nexus.release_docker_hub.ProjectClass._docker_tag", side_effect=self.mocked_docker_tag)
-        mocker.patch("lftools.nexus.release_docker_hub.ProjectClass._docker_push", side_effect=self.mocked_docker_push)
         mocker.patch(
-            "lftools.nexus.release_docker_hub.ProjectClass._docker_cleanup", side_effect=self.mocked_docker_cleanup
+            "lftools.nexus.release_docker_hub.ProjectClass._docker_pull",
+            side_effect=self.mocked_docker_pull,
+        )
+        mocker.patch(
+            "lftools.nexus.release_docker_hub.ProjectClass._docker_tag",
+            side_effect=self.mocked_docker_tag,
+        )
+        mocker.patch(
+            "lftools.nexus.release_docker_hub.ProjectClass._docker_push",
+            side_effect=self.mocked_docker_push,
+        )
+        mocker.patch(
+            "lftools.nexus.release_docker_hub.ProjectClass._docker_cleanup",
+            side_effect=self.mocked_docker_cleanup,
         )
 
         project = ["onap", "sdc-helm-validator", ""]
@@ -541,7 +615,10 @@ class TestProjectClass:
         nexus_answer_invalid_tags = ["v1.0.0", "latest"]
         docker_url = "https://registry.hub.docker.com/v2/namespaces/onap/repositories/sdc-helm-validator/tags"
         docker_answer = data_from_file(
-            os.path.join(str(datafiles), "releasedockerhub_dockertags-sdc-helm-validator-missing1.json")
+            os.path.join(
+                str(datafiles),
+                "releasedockerhub_dockertags-sdc-helm-validator-missing1.json",
+            )
         )
         docker_answer_valid_tags = ["1.3.0", "1.3.1", "1.4.1", "1.6.0", "1.7.0"]
         docker_answer_invalid_tags = ["latest", "v1.0.0"]
@@ -549,7 +626,9 @@ class TestProjectClass:
             "1.4.0",
         ]
 
-        self.counter.pull = self.counter.tag = self.counter.push = self.counter.cleanup = 0
+        self.counter.pull = self.counter.tag = self.counter.push = (
+            self.counter.cleanup
+        ) = 0
 
         responses.add(responses.GET, nexus_url, body=nexus_answer, status=200)
         responses.add(responses.GET, docker_url, body=docker_answer, status=200)
@@ -576,27 +655,37 @@ class TestProjectClass:
         with pytest.raises(requests.HTTPError):
             test_proj.docker_pull_tag_push()
 
-        self.counter.pull = self.counter.tag = self.counter.push = self.counter.cleanup = 0
+        self.counter.pull = self.counter.tag = self.counter.push = (
+            self.counter.cleanup
+        ) = 0
         self.nbr_exc.pull = 0
         self.nbr_exc.tag = 90
         with pytest.raises(requests.HTTPError):
             test_proj.docker_pull_tag_push()
 
-        self.counter.pull = self.counter.tag = self.counter.push = self.counter.cleanup = 0
+        self.counter.pull = self.counter.tag = self.counter.push = (
+            self.counter.cleanup
+        ) = 0
         self.nbr_exc.pull = self.nbr_exc.tag = 0
         self.nbr_exc.push = 90
         with pytest.raises(requests.HTTPError):
             test_proj.docker_pull_tag_push()
 
-        self.counter.pull = self.counter.tag = self.counter.push = self.counter.cleanup = 0
+        self.counter.pull = self.counter.tag = self.counter.push = (
+            self.counter.cleanup
+        ) = 0
         self.nbr_exc.pull = self.nbr_exc.tag = self.nbr_exc.push = 0
         self.nbr_exc.cleanup = 90
         with pytest.raises(requests.HTTPError):
             test_proj.docker_pull_tag_push()
 
         # Verify 89 timeouts and the 90 is ok per stage
-        self.counter.pull = self.counter.tag = self.counter.push = self.counter.cleanup = 0
-        self.nbr_exc.pull = self.nbr_exc.tag = self.nbr_exc.push = self.nbr_exc.cleanup = 89
+        self.counter.pull = self.counter.tag = self.counter.push = (
+            self.counter.cleanup
+        ) = 0
+        self.nbr_exc.pull = self.nbr_exc.tag = self.nbr_exc.push = (
+            self.nbr_exc.cleanup
+        ) = 89
         test_proj.docker_pull_tag_push()
 
         assert self.counter.pull == 90
@@ -654,7 +743,9 @@ class TestFetchNexus3Catalog:
         assert rdh.NexusCatalog[0][1] == "clamp-dashboard-logstash"
 
     def test_get_all_onap_and_specify_repo_file(self, datafiles):
-        repo_names_file = os.path.join(str(datafiles), "releasedockerhub_reponamelist1.txt")
+        repo_names_file = os.path.join(
+            str(datafiles), "releasedockerhub_reponamelist1.txt"
+        )
         rdh.NexusCatalog = []
         rdh.initialize("onap")
         responses.add(responses.GET, self.url, body=self.answer, status=200)
@@ -670,7 +761,9 @@ class TestFetchNexus3Catalog:
     os.path.join(FIXTURE_DIR, "nexus"),
 )
 class TestFetchAllTagsAndUpdate:
-    _test_image_long_id = "sha256:3450464d68c9443dedc8bfe3272a23e6441c37f707c42d32fee0ebdbcd319d2c"
+    _test_image_long_id = (
+        "sha256:3450464d68c9443dedc8bfe3272a23e6441c37f707c42d32fee0ebdbcd319d2c"
+    )
     _test_image_short_id = "sha256:3450464d68"
     _expected_nexus_image_str = [
         "nexus3.onap.org:10002/onap/sdc-helm-validator:1.4.0",
@@ -702,7 +795,9 @@ class TestFetchAllTagsAndUpdate:
 
     nbr_exc = nbr_exceptions
 
-    def mocked_docker_pull(self, nexus_image_str, count, tag, retry_text="", progbar=False):
+    def mocked_docker_pull(
+        self, nexus_image_str, count, tag, retry_text="", progbar=False
+    ):
         """Mocking Pull an image from Nexus."""
         if nexus_image_str not in self._expected_nexus_image_str:
             print("IMAGESTR {}".format(nexus_image_str))
@@ -743,34 +838,57 @@ class TestFetchAllTagsAndUpdate:
             raise requests.exceptions.ConnectionError("Connection Error")
 
     def initiate_test_fetch(self, responses, datafiles, mocker, repo=""):
-        mocker.patch("lftools.nexus.release_docker_hub.ProjectClass._docker_pull", side_effect=self.mocked_docker_pull)
-        mocker.patch("lftools.nexus.release_docker_hub.ProjectClass._docker_tag", side_effect=self.mocked_docker_tag)
-        mocker.patch("lftools.nexus.release_docker_hub.ProjectClass._docker_push", side_effect=self.mocked_docker_push)
         mocker.patch(
-            "lftools.nexus.release_docker_hub.ProjectClass._docker_cleanup", side_effect=self.mocked_docker_cleanup
+            "lftools.nexus.release_docker_hub.ProjectClass._docker_pull",
+            side_effect=self.mocked_docker_pull,
+        )
+        mocker.patch(
+            "lftools.nexus.release_docker_hub.ProjectClass._docker_tag",
+            side_effect=self.mocked_docker_tag,
+        )
+        mocker.patch(
+            "lftools.nexus.release_docker_hub.ProjectClass._docker_push",
+            side_effect=self.mocked_docker_push,
+        )
+        mocker.patch(
+            "lftools.nexus.release_docker_hub.ProjectClass._docker_cleanup",
+            side_effect=self.mocked_docker_cleanup,
         )
         catalog_url = "https://nexus3.onap.org:10002/v2/_catalog"
-        catalog_answer = '{"repositories":["onap/sdc-helm-validator","onap/gizmo","onap/gizmo2"]}'
+        catalog_answer = (
+            '{"repositories":["onap/sdc-helm-validator","onap/gizmo","onap/gizmo2"]}'
+        )
 
         # Missing one tag in docker
-        nexus_url1 = "https://nexus3.onap.org:10002/v2/onap/sdc-helm-validator/tags/list"
+        nexus_url1 = (
+            "https://nexus3.onap.org:10002/v2/onap/sdc-helm-validator/tags/list"
+        )
         nexus_answer1 = '{"name":"onap/sdc-helm-validator","tags":["v1.0.0","1.3.0", "1.3.1", "1.4.0", "1.4.1","1.6.0", "1.7.0","latest"]}'  # noqa
         docker_url1 = "https://registry.hub.docker.com/v2/namespaces/onap/repositories/sdc-helm-validator/tags"
         docker_answer1 = data_from_file(
-            os.path.join(str(datafiles), "releasedockerhub_dockertags-sdc-helm-validator-missing1.json")
+            os.path.join(
+                str(datafiles),
+                "releasedockerhub_dockertags-sdc-helm-validator-missing1.json",
+            )
         )
 
         # No missing tags
         nexus_url2 = "https://nexus3.onap.org:10002/v2/onap/gizmo/tags/list"
         nexus_answer2 = '{"name":"onap/gizmo","tags":["1.2.0","1.2.1","1.3.0","1.3.1","1.3.2","1.4.0","1.5.2"]}'
-        docker_url2 = "https://registry.hub.docker.com/v2/namespaces/onap/repositories/gizmo/tags"
-        docker_answer2 = data_from_file(os.path.join(str(datafiles), "releasedockerhub_dockertags-gizmo.json"))
+        docker_url2 = (
+            "https://registry.hub.docker.com/v2/namespaces/onap/repositories/gizmo/tags"
+        )
+        docker_answer2 = data_from_file(
+            os.path.join(str(datafiles), "releasedockerhub_dockertags-gizmo.json")
+        )
 
         # Missing two tags in docker
         nexus_url3 = "https://nexus3.onap.org:10002/v2/onap/gizmo2/tags/list"
         nexus_answer3 = '{"name":"onap/gizmo2","tags":["1.2.1","1.3.1","1.3.2"]}'
         docker_url3 = "https://registry.hub.docker.com/v2/namespaces/onap/repositories/gizmo2/tags"
-        docker_answer3 = data_from_file(os.path.join(str(datafiles), "releasedockerhub_dockertags-gizmo2.json"))
+        docker_answer3 = data_from_file(
+            os.path.join(str(datafiles), "releasedockerhub_dockertags-gizmo2.json")
+        )
 
         responses.add(responses.GET, catalog_url, body=catalog_answer, status=200)
 
@@ -785,17 +903,23 @@ class TestFetchAllTagsAndUpdate:
             responses.add(responses.GET, nexus_url3, body=nexus_answer3, status=200)
             responses.add(responses.GET, docker_url3, body=docker_answer3, status=200)
 
-        self.counter.pull = self.counter.tag = self.counter.push = self.counter.cleanup = 0
+        self.counter.pull = self.counter.tag = self.counter.push = (
+            self.counter.cleanup
+        ) = 0
 
     def initiate_bogus_org_test_fetch(self, responses, org):
         url = "https://nexus3.{}.org:10002/v2/_catalog".format(org)
         exception = requests.HTTPError(
-            "Issues with URL: {} - <class 'requests.exceptions.ConnectionError'>".format(url)
+            "Issues with URL: {} - <class 'requests.exceptions.ConnectionError'>".format(
+                url
+            )
         )
         responses.add(responses.GET, url, body=exception)
         rdh.NexusCatalog = []
         rdh.projects = []
-        self.counter.pull = self.counter.tag = self.counter.push = self.counter.cleanup = 0
+        self.counter.pull = self.counter.tag = self.counter.push = (
+            self.counter.cleanup
+        ) = 0
 
     def test_fetch_all_tags(self, responses, datafiles, mocker):
         self.initiate_test_fetch(responses, datafiles, mocker)

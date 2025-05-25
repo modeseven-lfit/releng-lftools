@@ -95,11 +95,21 @@ class Nexus2(client.RestApi):
 
         repo_list = []
         for repo in result:
-            repo_list.append([repo["name"], repo["repoType"], repo["provider"], repo["id"]])
+            repo_list.append(
+                [repo["name"], repo["repoType"], repo["provider"], repo["id"]]
+            )
 
         return repo_list
 
-    def repo_create(self, repo_type, repo_id, repo_name, repo_provider, repo_policy, repo_upstream_url):
+    def repo_create(
+        self,
+        repo_type,
+        repo_id,
+        repo_name,
+        repo_provider,
+        repo_policy,
+        repo_upstream_url,
+    ):
         """Add a new repo.
 
         :param repo_type: the type of repo. Valid types are 'proxy' and 'hosted'
@@ -127,7 +137,11 @@ class Nexus2(client.RestApi):
 
         if repo_type == "hosted":
             data["data"].update(
-                {"checksumPolicy": "IGNORE", "downloadRemoteIndexes": False, "writePolicy": "ALLOW_WRITE_ONCE"}
+                {
+                    "checksumPolicy": "IGNORE",
+                    "downloadRemoteIndexes": False,
+                    "writePolicy": "ALLOW_WRITE_ONCE",
+                }
             )
             if repo_provider == "site":
                 data["data"].update(
@@ -200,7 +214,9 @@ class Nexus2(client.RestApi):
 
         return role_list
 
-    def role_create(self, role_id, role_name, role_description, roles_list=None, privs_list=None):
+    def role_create(
+        self, role_id, role_name, role_description, roles_list=None, privs_list=None
+    ):
         """Create a new role.
 
         :param role_id: the ID name of the role (string)
@@ -254,7 +270,15 @@ class Nexus2(client.RestApi):
             for role in user["roles"]:
                 role_list.append([role["roleId"]])
 
-            user_list.append([user["userId"], user["firstName"], user["lastName"], user["status"], role_list])
+            user_list.append(
+                [
+                    user["userId"],
+                    user["firstName"],
+                    user["lastName"],
+                    user["status"],
+                    role_list,
+                ]
+            )
 
         return user_list
 

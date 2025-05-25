@@ -51,7 +51,9 @@ def mock_init(mocker, datafiles):
     git = Gerrit(creds=creds, fqdn="gerrit.example.com", project="test")
 
     Gerrit.get_commit_hook.assert_called_once()
-    Repo.clone_from.assert_called_once_with("https://myname:mypass@gerrit.example.com/r/a/test", ciman_dir)
+    Repo.clone_from.assert_called_once_with(
+        "https://myname:mypass@gerrit.example.com/r/a/test", ciman_dir
+    )
     mocker.stopall()
     return git
 
@@ -82,7 +84,10 @@ def test_add_info_job(mock_init, datafiles, mocker):
     issue_id = "TEST-123"
     agent = ""
     commit_msg = "Chore: Automation adds project-subproject.yaml"
-    filepath = os.path.join(mock_init.repo.working_tree_dir, "jjb/project-subproject/project-subproject.yaml")
+    filepath = os.path.join(
+        mock_init.repo.working_tree_dir,
+        "jjb/project-subproject/project-subproject.yaml",
+    )
     content = """---
 - project:
     name: project-subproject-project-view
@@ -173,7 +178,9 @@ serverCredentialMappings:
   - serverId: "nexus3.example.com:10002"
     credentialsId: "project-subproject\""""
 
-    mock_init.add_maven_config(fqdn, gerrit_project, issue_id, "nexus3.example.com", "10001,10002")
+    mock_init.add_maven_config(
+        fqdn, gerrit_project, issue_id, "nexus3.example.com", "10001,10002"
+    )
     Gerrit.add_file.assert_called_with(creds_path, server_creds_content)
 
     # Test 3 #
@@ -190,5 +197,7 @@ serverCredentialMappings:
   - serverId: "docker.io"
     credentialsId: "dockerhub-cred\""""
 
-    mock_init.add_maven_config(fqdn, gerrit_project, issue_id, "nexus3.example.com", "10001,10002")
+    mock_init.add_maven_config(
+        fqdn, gerrit_project, issue_id, "nexus3.example.com", "10001,10002"
+    )
     Gerrit.add_file.assert_called_with(creds_path, server_creds_content)

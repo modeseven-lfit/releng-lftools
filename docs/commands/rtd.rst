@@ -68,4 +68,3 @@ API requires a [rtd] section in ~/.config/lftools/lftools.ini:
    [rtd]
    token = REDACTED
    endpoint = https://readthedocs.org/api/v3/
-

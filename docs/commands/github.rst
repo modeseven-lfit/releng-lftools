@@ -55,4 +55,3 @@ API requires a [github] or [github.OrgName] section in ~/.config/lftools/lftools
 
    [github] or [github.orgName]
    token = REDACTED
-
