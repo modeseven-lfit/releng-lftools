@@ -18,7 +18,7 @@ jobs:
   repository:
     name: 'Repository'
     # yamllint disable-line rule:line-length
-    uses: os-climate/osc-github-devops/.github/workflows/reuse-inspect-repository.yaml@50a55963fb815139987f49c15f7380eb5d028974 # Pre v0.1.30
+    uses: os-climate/osc-github-devops/.github/workflows/reuse-inspect-repository.yaml@a46bbcbadd4d713b3ae1ddc66ae7724e66e89005 # Pre v0.1.37
     permissions:
       contents: read
 
