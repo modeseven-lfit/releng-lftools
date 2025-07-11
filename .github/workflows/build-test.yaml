@@ -143,7 +143,7 @@ jobs:
 
       - name: "Audit dependencies ${{ matrix.python-version }}"
         # yamllint disable-line rule:line-length
-        uses: lfreleng-actions/python-audit-action@4c51bc76f9876b4f294f8afa4bb002b0b89aec68 # v0.1.3
+        uses: lfreleng-actions/python-audit-action@bab5316468c108870eb759ef0de622bae9239aad # v0.2.2
         with:
           python_version: ${{ matrix.python-version }}
 
